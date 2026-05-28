@@ -1,0 +1,576 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Transaction Details | TheBorrow</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#dadad9",
+              "on-tertiary-fixed": "#351000",
+              surface: "#faf9f8",
+              "on-secondary-fixed": "#2f1500",
+              "primary-container": "#134e5e",
+              "inverse-primary": "#9acee1",
+              "surface-container-highest": "#e3e2e1",
+              "on-secondary-container": "#663500",
+              "surface-bright": "#faf9f8",
+              "tertiary-container": "#77340e",
+              "surface-variant": "#e3e2e1",
+              "inverse-on-surface": "#f1f0f0",
+              "on-primary-fixed": "#001f28",
+              secondary: "#904d00",
+              background: "#faf9f8",
+              "inverse-surface": "#2f3130",
+              primary: "#003644",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#124d5d",
+              "on-surface": "#1a1c1c",
+              "surface-container-high": "#e9e8e7",
+              "tertiary-fixed": "#ffdbcc",
+              "surface-container": "#eeeeed",
+              outline: "#70787c",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#40484b",
+              "on-tertiary-fixed-variant": "#76330d",
+              "secondary-fixed": "#ffdcc3",
+              "primary-fixed-dim": "#9acee1",
+              "on-secondary-fixed-variant": "#6e3900",
+              "surface-tint": "#306576",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#8abed1",
+              "primary-fixed": "#b6ebfe",
+              "outline-variant": "#c0c8cb",
+              "secondary-fixed-dim": "#ffb77d",
+              "secondary-container": "#fe932c",
+              "on-tertiary-container": "#fe9f71",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1c1c",
+              tertiary: "#582000",
+              "surface-container-low": "#f4f3f2",
+              "tertiary-fixed-dim": "#ffb693",
+              "on-secondary": "#ffffff",
+              error: "#ba1a1a",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "section-gap": "64px",
+              base: "8px",
+              "container-padding-desktop": "40px",
+              gutter: "24px",
+              "container-padding-mobile": "20px",
+            },
+            fontFamily: {
+              "body-md": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-lg": ["Inter"],
+              "title-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "label-sm": [
+                "13px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        background-color: #faf9f8;
+        color: #1a1c1c;
+      }
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+      }
+      .focused-lane {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+    </style>
+  </head>
+  <body class="font-body-md text-body-md flex">
+    <aside
+      class="hidden md:flex flex-col h-screen w-64 left-0 sticky top-0 bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline p-gutter gap-4"
+    >
+      <div class="mb-8 px-2">
+        <img
+          alt="TheBorrow"
+          class="h-12 w-auto mb-2"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaZE00ZRBrZDSV6cab58tItKA-NApEGvP6T58VWUk3RzEjSldSjMxg3vt1tr1Ee9-uCUlp-HdJz2G7e3Y_hOLyPGKPHpOfb3XEw8fX_oDvG60BiCpOh8DtUB4HkizOKr38oNTbjdjaFz6xtzXKSYL1UNSg04zxc2YH_cnon8CClMQna0m0oY6HP1Gn_5uYe_Ngdnjw9SOJ-rEbqbOP4F_S24tVObUMnHeNHfS5a-C-3MzetgvCO5pVoEAgCSrYICvBsJ01S5EZ5w"
+        />
+        <p class="font-label-sm text-label-sm text-on-surface-variant">
+          Financial Clarity
+        </p>
+      </div>
+      <nav class="flex flex-col gap-2 grow">
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-outline hover:bg-surface-variant transition-all rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="dashboard"
+            >dashboard</span
+          >
+          <span class="font-label-sm text-label-sm">Dashboard</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-outline hover:bg-surface-variant transition-all rounded-lg font-bold"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="upload_file"
+            >upload_file</span
+          >
+          <span class="font-label-sm text-label-sm">Lent</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-outline hover:bg-surface-variant transition-all rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="download"
+            >download</span
+          >
+          <span class="font-label-sm text-label-sm">Borrowed</span>
+        </a>
+        <a
+          class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-outline hover:bg-surface-variant transition-all rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="settings"
+            >settings</span
+          >
+          <span class="font-label-sm text-label-sm">Settings</span>
+        </a>
+      </nav>
+    </aside>
+    <!-- TopNavBar (Shared Component) -->
+    <main class="pb-20 flex-1">
+      <header
+        class="bg-surface dark:bg-background border-b border-outline-variant dark:border-outline flex justify-between items-center w-full px-container-padding-desktop py-4 max-w-7xl mx-auto z-10 sticky top-0"
+      >
+        <div
+          class="flex items-center bg-surface-container-low rounded-full px-4 py-2 w-full max-w-md"
+        >
+          <span class="material-symbols-outlined text-outline">search</span>
+          <input
+            class="bg-transparent border-none focus:ring-0 w-full text-body-md font-body-md px-3 text-on-surface-variant"
+            placeholder="Search transactions..."
+            type="text"
+          />
+        </div>
+        <div class="flex items-center gap-4 ml-gutter">
+          <button
+            class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full relative"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+            <span
+              class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"
+            ></span>
+          </button>
+          <button
+            class="p-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full"
+          >
+            <span class="material-symbols-outlined">account_circle</span>
+          </button>
+        </div>
+      </header>
+      <div class="focused-lane mt-8">
+        <!-- Breadcrumb / Back Button -->
+        <div class="mb-8 flex items-center gap-2 text-on-surface-variant">
+          <button
+            class="flex items-center gap-1 hover:text-primary transition-colors font-label-sm text-label-sm"
+          >
+            <span class="material-symbols-outlined text-[18px]"
+              >arrow_back</span
+            >
+            Back to Dashboard
+          </button>
+        </div>
+        <!-- Header Section -->
+        <div class="mb-12 text-center md:text-left">
+          <h1 class="font-headline-lg text-headline-lg text-primary mb-2">
+            Review Transaction
+          </h1>
+          <p class="text-on-surface-variant font-body-md text-body-md">
+            Please verify the details below before finalizing the agreement.
+          </p>
+        </div>
+        <!-- Asymmetric Details Layout -->
+        <div class="bento-grid">
+          <!-- Main Item Card (Left/Main) -->
+          <div class="col-span-12 lg:col-span-8 space-y-6">
+            <div
+              class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8 transition-shadow hover:shadow-sm"
+            >
+              <div class="flex flex-col md:flex-row gap-8">
+                <div
+                  class="w-full md:w-48 h-48 rounded-lg overflow-hidden bg-surface-container"
+                >
+                  <img
+                    alt="Item Image"
+                    class="w-full h-full object-cover"
+                    data-alt="A high-quality studio photograph of a premium pair of silver and black noise-canceling headphones resting on a minimalist oak table. The lighting is soft and diffused, creating a calm and professional mood. The background is a clean, warm-grey-taupe wall, maintaining the modern burrow aesthetic of stability and warmth."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuACZ0832bNoj3mp_PWSCfQ-eKPyLhbG4LRWToCV88ToiBPqgTph9tMbbGiq2AYG8sAz-mntNvVjbJh04MFigIcZJt0fqAHiTY4A3qCU0qqSfair8X1qGMezIQoaRaQbxq0hqNGQ7c_rdav60P5yEl2f4DCiyqi5KHIrTstRVPSQZbK3fQkxeMqs3AyGihOOXNZcCF6mViuM9uCwl0HMuAplCD3LfqsLoweG_nJs61eege1kXeLhRSd6ZKjvTYcnXSq61iLWAqSR_Q"
+                  />
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <span
+                        class="inline-block px-3 py-1 bg-primary-container/10 text-primary rounded-full font-label-sm text-label-sm mb-2"
+                        >Item Loan</span
+                      >
+                      <h2 class="font-title-md text-title-md text-on-surface">
+                        Sony WH-1000XM4 Headphones
+                      </h2>
+                    </div>
+                    <div class="text-right">
+                      <p
+                        class="font-label-sm text-label-sm text-on-surface-variant"
+                      >
+                        Value
+                      </p>
+                      <p class="font-title-md text-title-md text-primary">
+                        €249.00
+                      </p>
+                    </div>
+                  </div>
+                  <p
+                    class="text-on-surface-variant font-body-md text-body-md mb-6 leading-relaxed"
+                  >
+                    Premium noise-canceling headphones including the original
+                    travel case and charging cable. To be returned in the same
+                    condition as received.
+                  </p>
+                  <div
+                    class="grid grid-cols-2 gap-4 border-t border-outline-variant pt-6"
+                  >
+                    <div>
+                      <p
+                        class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1"
+                      >
+                        Start Date
+                      </p>
+                      <div
+                        class="flex items-center gap-2 text-on-surface font-title-md text-title-md"
+                      >
+                        <span class="material-symbols-outlined text-primary"
+                          >calendar_today</span
+                        >
+                        Oct 24, 2023
+                      </div>
+                    </div>
+                    <div>
+                      <p
+                        class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1"
+                      >
+                        End Date
+                      </p>
+                      <div
+                        class="flex items-center gap-2 text-on-surface font-title-md text-title-md"
+                      >
+                        <span class="material-symbols-outlined text-primary"
+                          >event_upcoming</span
+                        >
+                        Oct 31, 2023
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Conditions & Security -->
+            <div
+              class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8"
+            >
+              <h3
+                class="font-title-md text-title-md text-on-surface mb-6 flex items-center gap-2"
+              >
+                <span class="material-symbols-outlined">gavel</span>
+                Terms &amp; Conditions
+              </h3>
+              <ul class="space-y-4">
+                <li class="flex gap-3">
+                  <span
+                    class="material-symbols-outlined text-secondary-container"
+                    >check_circle</span
+                  >
+                  <p class="text-on-surface-variant">
+                    The borrower is responsible for any physical damage beyond
+                    normal wear and tear.
+                  </p>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="material-symbols-outlined text-secondary-container"
+                    >check_circle</span
+                  >
+                  <p class="text-on-surface-variant">
+                    Late returns may incur a penalty of €5.00 per day as agreed
+                    upon by both parties.
+                  </p>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="material-symbols-outlined text-secondary-container"
+                    >check_circle</span
+                  >
+                  <p class="text-on-surface-variant">
+                    The item must be handed over personally at the agreed
+                    location (Central Park Entrance).
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Parties & Actions (Right/Sidebar) -->
+          <div class="col-span-12 lg:col-span-4 space-y-6">
+            <!-- Party Information -->
+            <div
+              class="bg-surface-container-low border border-outline-variant rounded-xl p-6"
+            >
+              <h3
+                class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-6"
+              >
+                Parties Involved
+              </h3>
+              <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Lender profile"
+                    class="w-12 h-12 rounded-full object-cover"
+                    data-alt="A detailed portrait of a middle-aged woman with glasses and a kind expression, wearing a cream sweater. The background is a brightly lit, minimalist living room with warm earthy tones. The overall aesthetic is trustworthy and approachable, fitting the naturalist palette of the TheBorrow design system."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpQZwGY9Zvl-I5_Rqtj4XPbAnpsrvTKwsPWYgXLTsvQ2ZE7hq9KC9Vr3jstb1baf03f7iMV9SHSI6luRwohO60Z988OnFT3MNwhD8OxC4JWXxF4zIzuLooDr-y7enWrLAQvoNbL0z5efypC6y_XFYGlDoM4PmJqCh-95CtFULlw56AQg8VhkBCsvvELmmRoS-IkvWZVgc6qUCsYCnIWELM-B0ONEL-TYzxQdMyK79cVNZYdv8zbWRRVloAm_-yX_Kg8QEPC8DLXA"
+                  />
+                  <div>
+                    <p
+                      class="font-label-sm text-label-sm text-on-surface-variant"
+                    >
+                      Lender
+                    </p>
+                    <p
+                      class="font-body-lg text-body-lg font-semibold text-on-surface"
+                    >
+                      Sarah Mitchell
+                    </p>
+                    <div class="flex items-center gap-1 text-secondary">
+                      <span
+                        class="material-symbols-outlined text-[16px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span class="font-label-sm text-label-sm"
+                        >4.9 (12 transactions)</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flex justify-center py-2">
+                  <span class="material-symbols-outlined text-outline"
+                    >swap_vert</span
+                  >
+                </div>
+                <div class="flex items-center gap-4">
+                  <img
+                    alt="Borrower profile"
+                    class="w-12 h-12 rounded-full object-cover"
+                    data-alt="A professional headshot of a friendly man with short dark hair and a warm smile, set against a soft-focus office background with natural lighting. The image follows a high-key, modern aesthetic with a clean and bright atmosphere, matching a professional financial application user profile."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLz7K_v3_x2Zhk0NWljXTzHlTKy1jKxeE2jRaSefvfvK99fE-7r3VWyd33nopU0-qsb2kYybTNuAe6eslP1aI1GRWboEG_yI2J_o2CqAx-jISw6p9A3BWHbiOU_xqkECZjLacgPl0wb9ifp3etp5-KZBPfaVKarNHfzjQC33FVXOEuRKhEjjwoKe7yaCmqaXpiLO-Voee_H_iERJ9g3enh2VO2YsxEp3ZhwSBfQx0pB9SY2qIXkpGSpUxqBg66mXKxx40tEFyI9g"
+                  />
+                  <div>
+                    <p
+                      class="font-label-sm text-label-sm text-on-surface-variant"
+                    >
+                      Borrower (You)
+                    </p>
+                    <p
+                      class="font-body-lg text-body-lg font-semibold text-on-surface"
+                    >
+                      Alex Rivera
+                    </p>
+                    <div class="flex items-center gap-1 text-secondary">
+                      <span
+                        class="material-symbols-outlined text-[16px]"
+                        style="font-variation-settings: &quot;FILL&quot; 1"
+                        >star</span
+                      >
+                      <span class="font-label-sm text-label-sm"
+                        >5.0 (8 transactions)</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Action Panel -->
+            <div
+              class="bg-surface-container-lowest border-2 border-primary/20 rounded-xl p-8 shadow-lg"
+            >
+              <button
+                class="w-full bg-primary text-on-primary py-4 rounded-lg font-title-md text-title-md hover:opacity-90 active:scale-95 transition-all mb-4 flex items-center justify-center gap-2 shadow-md"
+              >
+                Confirm Agreement
+              </button>
+              <div class="flex flex-col gap-3">
+                <button
+                  class="w-full border border-primary text-primary py-3 rounded-lg font-label-sm text-label-sm hover:bg-primary/5 transition-colors flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined text-[20px]"
+                    >update</span
+                  >
+                  Verlängerung anfragen
+                </button>
+                <button
+                  class="w-full border border-outline text-on-surface-variant py-3 rounded-lg font-label-sm text-label-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined text-[20px]"
+                    >cancel</span
+                  >
+                  als beendet markieren
+                </button>
+              </div>
+              <p
+                class="mt-6 text-[12px] text-on-surface-variant text-center leading-tight"
+              >
+                By confirming, you agree to the temporary transfer of the item
+                and the terms stated above.
+              </p>
+            </div>
+            <!-- Support Card -->
+            <div
+              class="p-6 bg-tertiary-fixed text-on-tertiary-fixed rounded-xl flex items-start gap-4"
+            >
+              <span class="material-symbols-outlined">help_outline</span>
+              <div>
+                <p class="font-label-sm text-label-sm font-bold mb-1">
+                  Need Help?
+                </p>
+                <p class="font-label-sm text-label-sm opacity-80">
+                  Our support team is available 24/7 for dispute mediation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Success Modal (Hidden by default) -->
+    <div
+      class="fixed inset-0 bg-on-surface/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-container-padding-mobile"
+      id="confirmModal"
+    >
+      <div
+        class="bg-surface-container-lowest max-w-md w-full rounded-2xl p-8 shadow-2xl text-center scale-90 transition-transform duration-300"
+        id="modalContent"
+      >
+        <div
+          class="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6"
+        >
+          <span class="material-symbols-outlined text-[48px]"
+            >check_circle</span
+          >
+        </div>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-3">
+          Confirmed!
+        </h2>
+        <p class="text-on-surface-variant font-body-md text-body-md mb-8">
+          Your transaction has been finalized. Sarah Mitchell has been notified
+          and the loan period has officially started.
+        </p>
+        <button
+          class="w-full bg-primary text-on-primary py-4 rounded-lg font-title-md text-title-md hover:opacity-90 active:scale-95 transition-all"
+          onclick="toggleModal()"
+        >
+          Great, thanks!
+        </button>
+      </div>
+    </div>
+    <script>
+      const confirmBtn = document.querySelector("button.bg-primary");
+      const modal = document.getElementById("confirmModal");
+      const modalContent = document.getElementById("modalContent");
+
+      function toggleModal() {
+        if (modal.classList.contains("hidden")) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+          setTimeout(() => {
+            modalContent.classList.remove("scale-90");
+            modalContent.classList.add("scale-100");
+          }, 10);
+        } else {
+          modalContent.classList.remove("scale-100");
+          modalContent.classList.add("scale-90");
+          setTimeout(() => {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+          }, 200);
+        }
+      }
+
+      confirmBtn.addEventListener("click", toggleModal);
+    </script>
+
+    <button
+      class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition-all z-50"
+      aria-label="New Transaction"
+    >
+      <span class="material-symbols-outlined text-[32px]">add</span>
+    </button>
+  </body>
+</html>

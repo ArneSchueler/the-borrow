@@ -1,0 +1,506 @@
+<!doctype html>
+<html class="light" lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#40484b",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#8abed1",
+              "surface-tint": "#306576",
+              "on-secondary-fixed": "#2f1500",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e3e2e1",
+              "primary-fixed-dim": "#9acee1",
+              "on-primary-fixed": "#001f28",
+              "secondary-fixed": "#ffdcc3",
+              "secondary-fixed-dim": "#ffb77d",
+              surface: "#faf9f8",
+              "secondary-container": "#fe932c",
+              "on-secondary-container": "#663500",
+              "on-secondary": "#ffffff",
+              "tertiary-container": "#77340e",
+              "tertiary-fixed-dim": "#ffb693",
+              "surface-dim": "#dadad9",
+              "surface-container-highest": "#e3e2e1",
+              "primary-fixed": "#b6ebfe",
+              "on-background": "#1a1c1c",
+              "on-primary-fixed-variant": "#124d5d",
+              "on-error-container": "#93000a",
+              background: "#faf9f8",
+              secondary: "#904d00",
+              "tertiary-fixed": "#ffdbcc",
+              primary: "#003644",
+              "outline-variant": "#c0c8cb",
+              tertiary: "#582000",
+              "inverse-on-surface": "#f1f0f0",
+              "primary-container": "#134e5e",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#fe9f71",
+              "inverse-surface": "#2f3130",
+              "on-primary": "#ffffff",
+              error: "#ba1a1a",
+              "inverse-primary": "#9acee1",
+              "on-tertiary-fixed-variant": "#76330d",
+              "surface-container": "#eeeeed",
+              "surface-container-high": "#e9e8e7",
+              "on-secondary-fixed-variant": "#6e3900",
+              "surface-bright": "#faf9f8",
+              outline: "#70787c",
+              "on-surface": "#1a1c1c",
+              "surface-container-low": "#f4f3f2",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#351000",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "container-padding-mobile": "20px",
+              gutter: "24px",
+              "container-padding-desktop": "40px",
+              base: "8px",
+              "section-gap": "64px",
+            },
+            fontFamily: {
+              "body-lg": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "title-md": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-sm": [
+                "13px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #faf9f8;
+        color: #1a1c1c;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .sticky-bottom-action {
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed"
+  >
+    <!-- Header / Top Navigation (Suppressed shell, but using a simple back header) -->
+    <header
+      class="sticky top-0 z-50 bg-surface px-container-padding-mobile py-4 flex items-center border-b border-outline-variant"
+    >
+      <button
+        aria-label="Zurück"
+        class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors"
+      >
+        <span class="material-symbols-outlined block text-primary"
+          >arrow_back</span
+        >
+      </button>
+      <h1 class="font-title-md text-title-md ml-2 text-primary">
+        Transaktion prüfen
+      </h1>
+    </header>
+    <main
+      class="max-w-md mx-auto px-container-padding-mobile pt-gutter pb-32 pb-40"
+    >
+      <!-- Summary Header -->
+      <section class="mb-8">
+        <p
+          class="font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider"
+        >
+          Leihgabe Details
+        </p>
+        <h2
+          class="font-headline-lg-mobile text-headline-lg-mobile text-primary"
+        >
+          DJI Mavic 3 Pro
+        </h2>
+        <div class="flex items-center gap-2 mt-2">
+          <span
+            class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-sm text-label-sm"
+            >Privat</span
+          >
+          <span
+            class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-sm text-label-sm"
+            >3 Tage</span
+          >
+        </div>
+      </section>
+      <!-- Vertical Stack of Review Cards -->
+      <div class="flex flex-col gap-gutter">
+        <!-- Parties Involved Section -->
+        <section
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-gutter"
+        >
+          <h3
+            class="font-title-md text-title-md text-primary mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined">group</span>
+            Beteiligte Personen
+          </h3>
+          <div class="space-y-4">
+            <!-- Verleiher -->
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center overflow-hidden"
+              >
+                <img
+                  alt="Stefan"
+                  class="w-full h-full object-cover"
+                  data-alt="A clean, minimalist 3D avatar of a professional middle-aged man with short brown hair and a friendly expression, set against a soft Forest Teal background. The visual style is modern, approachable, and high-fidelity, following a soft lighting scheme that matches a warm-neutral UI palette."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJXYMmM8-u0aDI8EfHicRG6s3c6wkywLax7EL9mXgwSQtmFZIJQCTauTgAG8CjxTPr5tavDXka7RNFn-F1mRw9-34k0fZgaxtOHWYEWWu5LCkV_aTevDj6-3jPK8A0G5M6c1GHh5ZIx0oZIQx85YzaBOX5-x3elUZE_e1k1UFLgoGweV-VrILwmuHsE5kEqCMEALktdN3URfBXFEzoa3WYGdJzxWE_Yyzs04bJT-4RVVtRUYJ45ZW3zBl-LKDW3tWYrFgQfayTFQ"
+                />
+              </div>
+              <div class="flex-1">
+                <p class="font-label-sm text-label-sm text-on-surface-variant">
+                  Verleiher
+                </p>
+                <p class="font-body-md text-body-md font-semibold">
+                  Stefan Meier
+                </p>
+              </div>
+              <span
+                class="material-symbols-outlined text-primary"
+                data-weight="fill"
+                >verified_user</span
+              >
+            </div>
+            <div class="h-px bg-outline-variant w-full"></div>
+            <!-- Entleiher (You) -->
+            <div class="flex items-center gap-4">
+              <div
+                class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden"
+              >
+                <img
+                  alt="Julia"
+                  class="w-full h-full object-cover"
+                  data-alt="A modern 3D avatar of a young woman with glasses and a bright smile, wearing a professional cream-colored sweater. The portrait is centered on a warm-grey-taupe background, reflecting a minimalist and stable digital identity suitable for a secure financial lending application."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-EZA8ZzdZtPXhsD8SJa1-39g478Sjmaf7VavZ46XTRPYfw0MQp2DGQq1qhdrD7NwYd3PVOZeotSPIOuX_KuhImi7I2jboA0sCyAC_VDBfAFaQBn_yEWhQ2gypBRfWSZd0OleAt_4Z6SN4bGguRMyNmLWmBJOWbsmOwIWmIXMnT7Ha6uQ1By6d2Lq3gV1IzCqcl3h2zqzbyI5oXunI73W-QupOiULq1rliP8B0uhlWTQUYAa8Utzltg9wWK7xz3I4Z-lMwW7QnEg"
+                />
+              </div>
+              <div class="flex-1">
+                <p class="font-label-sm text-label-sm text-on-surface-variant">
+                  Entleiher
+                </p>
+                <p class="font-body-md text-body-md font-semibold">
+                  Julia Schmidt (Du)
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Item Details Section -->
+        <section
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-gutter"
+        >
+          <h3
+            class="font-title-md text-title-md text-primary mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined">info</span>
+            Gegenstand &amp; Zustand
+          </h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <p
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase"
+                >
+                  Seriennummer
+                </p>
+                <p class="font-body-md text-body-md font-mono">MV3P-9928-XL</p>
+              </div>
+              <span class="material-symbols-outlined text-outline"
+                >photo_camera</span
+              >
+            </div>
+            <div class="bg-surface-container-low rounded-lg p-3">
+              <p
+                class="font-label-sm text-label-sm text-on-surface-variant mb-1"
+              >
+                Zustandsnotiz:
+              </p>
+              <p class="font-body-md text-body-md italic text-on-surface">
+                "Neuwertig, keine Kratzer an den Linsen. Inklusive
+                Ersatzpropeller und 2 Akkus."
+              </p>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              <div
+                class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant"
+              >
+                <img
+                  alt="Drohne Detail"
+                  class="w-full h-full object-cover"
+                  data-alt="A high-resolution close-up of a high-end camera drone lens and gimbal system, captured with soft, professional studio lighting. The aesthetic is clean and industrial, with warm-grey-taupe background tones that emphasize the precision engineering of the device. The mood is stable and trustworthy."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpPNmDW8sERQNk1paz2-KuQjujfzvtimJCYqNGbIrYgjFfK3IVUEfWSZc3gwjcvaEdbpp2XqhzPvG3ktkag-50cqCG0C92D_46fK55KxBH9pnkb8N0tTAg3jSgEBZf83To7FV_EkuGsq_pwEvG2HjJElLuytT20o-kM7TZBrR6U5OeAngo3kXIHEOK_Q6vYRIUYYcJqyU7nyYb9MifBTG0sH0fpiLrTcR7KlV0ffmXC4ics4F2Nz3RvL6jFbF3qYHW6OKRj3FMww"
+                />
+              </div>
+              <div
+                class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant"
+              >
+                <img
+                  alt="Drohne Zubehör"
+                  class="w-full h-full object-cover"
+                  data-alt="A top-down view of organized drone accessories, including batteries and a remote control, laid out on a minimalist light-sand surface. The lighting is bright and high-key, creating a warm, modern aesthetic that feels organized and protective, echoing a digital burrow theme."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJkM1yc2lB5EzWZgbACiWsdCO-aLmSyAtC1B_RQCS1PmWViFrWiBl2cCnExxztnfo_-eLk59DogTiF-8mYjeFsGLinSR1b5IFBi6QSZCBYbtigcV5jFUp78c-EsPMIQyTQzLOJhi0yBUqHolMNVLShF-dLCN3-tBARbGX-f-294bbmJQgKj4DyaVYKttCONm_gKvPu5AeMdfRCulyBn-GJCPKf7ZaMr2K_iv6d_is4x1vhkfG4gV1tmgXLTsAESj2iyEBqMTk_8Q"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Terms & Conditions Section -->
+        <section
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-gutter"
+        >
+          <h3
+            class="font-title-md text-title-md text-primary mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined">gavel</span>
+            Bedingungen
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded bg-tertiary-fixed flex items-center justify-center"
+                >
+                  <span
+                    class="material-symbols-outlined text-on-tertiary-fixed-variant"
+                    >calendar_today</span
+                  >
+                </div>
+                <div>
+                  <p
+                    class="font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Zeitraum
+                  </p>
+                  <p class="font-body-md text-body-md font-semibold">
+                    12. Okt - 15. Okt
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center"
+                >
+                  <span
+                    class="material-symbols-outlined text-on-primary-fixed-variant"
+                    >payments</span
+                  >
+                </div>
+                <div>
+                  <p
+                    class="font-label-sm text-label-sm text-on-surface-variant"
+                  >
+                    Sicherheitsleistung (Kaution)
+                  </p>
+                  <p class="font-body-md text-body-md font-semibold">
+                    150,00 €
+                  </p>
+                </div>
+              </div>
+              <span class="text-on-surface-variant material-symbols-outlined"
+                >info</span
+              >
+            </div>
+            <div
+              class="p-3 bg-error-container text-on-error-container rounded-lg border border-error/10 flex gap-3"
+            >
+              <span class="material-symbols-outlined shrink-0"
+                >report_problem</span
+              >
+              <p class="font-label-sm text-label-sm">
+                Bei Beschädigung oder Verlust haftet der Entleiher in vollem
+                Umfang des Wiederbeschaffungswerts.
+              </p>
+            </div>
+          </div>
+        </section>
+        <!-- Confirmation Checkbox -->
+        <div class="px-2 mb-4">
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <div class="relative flex items-center mt-1">
+              <input
+                class="peer h-6 w-6 rounded border-outline-variant text-primary focus:ring-primary bg-surface-container-low transition-all"
+                id="agreement"
+                type="checkbox"
+              />
+              <span
+                class="material-symbols-outlined absolute opacity-0 peer-checked:opacity-100 text-white pointer-events-none text-sm left-1"
+                >check</span
+              >
+            </div>
+            <span
+              class="font-body-md text-body-md text-on-surface-variant select-none"
+            >
+              Ich bestätige, dass ich die
+              <span class="text-primary underline font-semibold"
+                >Nutzungsbedingungen</span
+              >
+              und Haftungsregeln gelesen habe und akzeptiere.
+            </span>
+          </label>
+        </div>
+      </div>
+    </main>
+    <!-- Sticky Bottom Button -->
+    <footer
+      class="fixed bottom-20 left-0 right-0 p-container-padding-mobile bg-surface border-t border-outline-variant sticky-bottom-action z-40"
+    >
+      <div class="max-w-md mx-auto flex flex-col gap-3">
+        <button
+          class="w-full bg-primary text-on-primary font-title-md text-title-md py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 shadow-lg"
+          disabled=""
+          id="confirm-btn"
+        >
+          <span class="material-symbols-outlined">verified</span>
+          Vereinbarung bestätigen
+        </button>
+        <button
+          class="w-full bg-transparent text-primary font-body-md text-body-md py-2 transition-colors hover:bg-surface-variant rounded-lg"
+        >
+          Abbrechen
+        </button>
+      </div>
+    </footer>
+    <nav
+      class="fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant md:hidden"
+    >
+      <div class="flex justify-around items-center h-20 px-4">
+        <!-- Dashboard (Active) -->
+        <a
+          class="flex flex-col items-center gap-1 bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-bold transition-transform active:scale-95"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            data-icon="dashboard"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >dashboard</span
+          >
+          <span class="font-label-sm text-label-sm">Dashboard</span>
+        </a>
+        <!-- Lent -->
+        <a
+          class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant transition-all px-4 py-2 rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="upload_file"
+            >upload_file</span
+          >
+          <span class="font-label-sm text-label-sm">Verliehen</span>
+        </a>
+        <!-- Borrowed -->
+        <a
+          class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant transition-all px-4 py-2 rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="download"
+            >download</span
+          >
+          <span class="font-label-sm text-label-sm">Geliehen</span>
+        </a>
+        <!-- Settings -->
+      </div>
+    </nav>
+    <script>
+      const checkbox = document.getElementById("agreement");
+      const confirmBtn = document.getElementById("confirm-btn");
+
+      checkbox.addEventListener("change", (e) => {
+        confirmBtn.disabled = !e.target.checked;
+        if (e.target.checked) {
+          confirmBtn.classList.add("bg-primary");
+        }
+      });
+
+      confirmBtn.addEventListener("click", () => {
+        confirmBtn.innerHTML =
+          '<span class="material-symbols-outlined animate-spin">sync</span> Wird verarbeitet...';
+        setTimeout(() => {
+          confirmBtn.innerHTML =
+            '<span class="material-symbols-outlined">check_circle</span> Bestätigt!';
+          confirmBtn.classList.remove("bg-primary");
+          confirmBtn.classList.add(
+            "bg-secondary-container",
+            "text-on-secondary-container",
+          );
+        }, 1500);
+      });
+    </script>
+  </body>
+</html>

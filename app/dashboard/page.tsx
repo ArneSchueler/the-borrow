@@ -1,6 +1,7 @@
-import { auth, signOut } from "../../auth";
+import { auth } from "../../auth";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import MainLayout from "../MainLayout";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -10,103 +11,238 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#faf9f8] text-[#1a1c1c] md:flex">
-      <aside className="sticky top-0 hidden h-screen w-64 flex-col gap-4 border-r border-[#c0c8cb] bg-[#f4f3f2] p-6 md:flex">
-        <div className="mb-8 px-2">
-          <h1 className="text-xl font-black text-[#003644]">TheBorrow</h1>
-          <p className="text-xs text-[#40484b]">Financial Clarity</p>
-        </div>
+    <MainLayout>
+      {/* Mobile Content */}
+      <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
+        <section>
+          <h1 className="text-[40px] font-bold leading-none text-[#0d4f63]">
+            Hallo, {session.user.name || "Julian"}
+          </h1>
+          <p className="mt-2 text-[29px] text-[#3f474b]">
+            Hier ist deine Ubersicht fur heute.
+          </p>
+        </section>
 
-        <nav className="flex grow flex-col gap-2">
-          <div className="rounded-lg bg-[#134e5e] px-4 py-3 text-sm font-semibold text-[#b6ebfe]">
-            Dashboard
+        <section className="grid grid-cols-2 gap-3">
+          <div className="rounded-xl bg-[#0d566b] p-4 text-white shadow-sm">
+            <p className="text-[13px] opacity-95">Verliehen</p>
+            <p className="mt-2 text-[39px] font-bold leading-none">2</p>
+            <p className="mt-1 text-[22px]">Vorgange</p>
           </div>
-          <button className="rounded-lg px-4 py-3 text-left text-sm text-[#40484b] transition hover:bg-[#e3e2e1]">
-            Lent
-          </button>
-          <button className="rounded-lg px-4 py-3 text-left text-sm text-[#40484b] transition hover:bg-[#e3e2e1]">
-            Borrowed
-          </button>
-          <button className="rounded-lg px-4 py-3 text-left text-sm text-[#40484b] transition hover:bg-[#e3e2e1]">
-            Settings
-          </button>
-        </nav>
-
-        <Button className="h-12 w-full bg-[#003644] text-white hover:opacity-90">
-          New Transaction
-        </Button>
-      </aside>
-
-      <main className="min-w-0 flex-1">
-        <header className="sticky top-0 z-10 mx-auto flex w-full max-w-7xl items-center justify-between border-b border-[#c0c8cb] bg-[#faf9f8] px-5 py-4 md:px-10">
-          <div className="flex w-full max-w-md items-center rounded-full bg-[#f4f3f2] px-4 py-2">
-            <span className="text-[#70787c]">Search</span>
+          <div className="rounded-xl bg-[#f7952f] p-4 text-[#3a230e] shadow-sm">
+            <p className="text-[13px] opacity-95">Geliehen</p>
+            <p className="mt-2 text-[39px] font-bold leading-none">1</p>
+            <p className="mt-1 text-[22px]">Vorgang</p>
           </div>
-          <div className="ml-6 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-[#e3e2e1]" />
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/login" });
-              }}
-            >
-              <Button type="submit" variant="outline" className="border-[#c0c8cb]">
-                Log out
-              </Button>
-            </form>
-          </div>
-        </header>
+        </section>
 
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-5 py-2 md:px-10">
-          <section className="mt-8">
-            <div className="mb-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-semibold text-[#003644]">Overview</h2>
-                <p className="text-[#40484b]">
-                  Welcome, {session.user.name || "User"} - manage your trust and shared assets in one place.
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[42px] font-semibold text-[#1f2325]">
+              Aktuell Verliehen
+            </h2>
+            <button className="text-[20px] font-medium text-[#0f4f64]">
+              Alle ansehen
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-3 rounded-xl border border-[#d9dddf] bg-white p-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#f1f3f4] text-[#5b6468]">
+                ◉
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[26px] font-semibold text-[#21272a]">
+                  Lukas M.
+                </p>
+                <p className="truncate text-[20px] text-[#40484b]">
+                  Kamera-Equipment
                 </p>
               </div>
-              <div className="flex gap-4">
-                <div className="min-w-[180px] rounded-2xl border border-[#c0c8cb] bg-[#e9e8e7] p-6">
-                  <p className="mb-1 text-xs uppercase tracking-wider text-[#70787c]">Total Lent</p>
-                  <p className="text-3xl font-semibold text-[#003644]">$1,450.00</p>
-                </div>
-                <div className="min-w-[180px] rounded-2xl border border-[#c0c8cb] bg-[#e9e8e7] p-6">
-                  <p className="mb-1 text-xs uppercase tracking-wider text-[#70787c]">Total Borrowed</p>
-                  <p className="text-3xl font-semibold text-[#904d00]">$320.00</p>
-                </div>
+              <div className="text-right">
+                <p className="text-[30px] font-bold text-[#1b1f21]">800 €</p>
+                <p className="text-[20px] text-[#40484b]">Noch 12 Tage</p>
               </div>
             </div>
-          </section>
 
-          <section>
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-[#1a1c1c]">Lent (Verliehen)</h3>
-              <button className="text-sm text-[#003644] hover:underline">View All</button>
-            </div>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="rounded-2xl border border-[#c0c8cb] bg-white p-6">
-                <h4 className="text-xl font-semibold text-[#003644]">$450.00</h4>
-                <p className="mb-6 text-[#40484b]">Canon EOS R5 Camera</p>
-                <Button variant="outline" className="w-full border-[#003644] text-[#003644]">
-                  Confirm Return
-                </Button>
+            <div className="flex items-center gap-3 rounded-xl border border-[#d9dddf] bg-white p-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#f1f3f4] text-[#5b6468]">
+                ◉
               </div>
-              <div className="rounded-2xl border border-[#c0c8cb] bg-white p-6">
-                <h4 className="text-xl font-semibold text-[#003644]">$1,000.00</h4>
-                <p className="mb-6 text-[#40484b]">Personal Loan</p>
-                <Button variant="outline" className="w-full border-[#003644] text-[#003644]">
-                  Remind Party
-                </Button>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[26px] font-semibold text-[#21272a]">
+                  WG Kasse
+                </p>
+                <p className="truncate text-[20px] text-[#40484b]">
+                  Nebenkosten
+                </p>
               </div>
-              <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[#c0c8cb] bg-[#f4f3f2] p-6 text-[#70787c]">
-                <p className="text-2xl">+</p>
-                <p className="text-sm">Lend something new</p>
+              <div className="text-right">
+                <p className="text-[30px] font-bold text-[#1b1f21]">440 €</p>
+                <p className="text-[20px] font-semibold text-[#d0262d]">
+                  Uberfallig
+                </p>
               </div>
             </div>
-          </section>
-        </div>
-      </main>
-    </div>
+          </div>
+        </section>
+
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[42px] font-semibold text-[#1f2325]">
+              Aktuell Geliehen
+            </h2>
+            <button className="text-[20px] font-medium text-[#0f4f64]">
+              Alle ansehen
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-xl border border-[#d9dddf] bg-white p-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#f1f3f4] text-[#5b6468]">
+              ▣
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[26px] font-semibold text-[#21272a]">
+                Hardware Store
+              </p>
+              <p className="truncate text-[20px] text-[#40484b]">
+                Werkzeug-Miete
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[30px] font-bold text-[#1b1f21]">450 €</p>
+              <p className="text-[20px] text-[#40484b]">Fallig: 2 Tage</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Desktop Content */}
+      <div className="hidden mx-auto w-full max-w-6xl px-8 pb-10 pt-8 md:block">
+        <section className="mb-10 flex items-start justify-between">
+          <div>
+            <h2 className="text-[42px] font-semibold text-[#0d4f63]">
+              Overview
+            </h2>
+            <p className="mt-2 max-w-md text-[22px] text-[#40484b]">
+              Manage your trust and shared assets in one place.
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <div className="w-[210px] rounded-2xl border border-[#c0c8cb] bg-[#e9e8e7] p-5">
+              <p className="text-xs uppercase tracking-widest text-[#70787c]">
+                Total Lent
+              </p>
+              <p className="mt-2 text-[46px] font-bold text-[#0d4f63]">3</p>
+              <p className="text-[40px] font-semibold text-[#0d4f63] leading-none">
+                Transactions
+              </p>
+            </div>
+            <div className="w-[210px] rounded-2xl border border-[#c0c8cb] bg-[#e9e8e7] p-5">
+              <p className="text-xs uppercase tracking-widest text-[#70787c]">
+                Total Borrowed
+              </p>
+              <p className="mt-2 text-[46px] font-bold text-[#8d4b00]">2</p>
+              <p className="text-[40px] font-semibold text-[#8d4b00] leading-none">
+                Transactions
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-[34px] font-semibold">Lent (Verliehen)</h3>
+            <button className="text-sm font-medium text-[#0f4f64]">
+              View All
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="rounded-2xl border border-[#d8dcdf] bg-white p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-[34px] font-bold text-[#0d4f63]">$450.00</p>
+                <span className="rounded-full bg-[#0f596f] px-3 py-1 text-xs text-white">
+                  Active
+                </span>
+              </div>
+              <p className="text-[22px] text-[#3f474b]">Canon EOS R5 Camera</p>
+              <p className="mt-2 text-[20px] text-[#4b5357]">Lukas Weber</p>
+              <p className="mt-1 text-[20px] text-[#4b5357]">
+                Due Oct 24, 2023
+              </p>
+              <button className="mt-4 w-full rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63]">
+                Confirm Return
+              </button>
+            </div>
+            <div className="rounded-2xl border border-[#d8dcdf] bg-white p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-[34px] font-bold text-[#0d4f63]">
+                  $1,000.00
+                </p>
+                <span className="rounded-full bg-[#ffdad6] px-3 py-1 text-xs text-[#93000a]">
+                  Overdue
+                </span>
+              </div>
+              <p className="text-[22px] text-[#3f474b]">Personal Loan</p>
+              <p className="mt-2 text-[20px] text-[#4b5357]">Elena Schmidt</p>
+              <p className="mt-1 text-[20px] text-[#4b5357]">
+                Due Oct 15, 2023
+              </p>
+              <button className="mt-4 w-full rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63]">
+                Remind Party
+              </button>
+            </div>
+            <Link
+              href="/new-transaction"
+              className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#c0c8cb] bg-[#f4f3f2] text-[#7a8388]"
+            >
+              <span className="text-4xl">+</span>
+              <span className="text-sm">Lend something new</span>
+            </Link>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-[34px] font-semibold">
+              Borrowed (Ausgeliehen)
+            </h3>
+            <button className="text-sm font-medium text-[#0f4f64]">
+              View All
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-[#d8dcdf] bg-white p-4">
+              <p className="text-[30px] font-semibold">Drill & Tool Kit</p>
+              <p className="text-[20px] text-[#3f474b]">
+                Borrowed from: Marco Polo
+              </p>
+              <div className="mt-3 flex gap-2">
+                <button className="rounded-lg bg-[#0f596f] px-4 py-2 text-xs font-medium text-white">
+                  Contact Owner
+                </button>
+                <button className="rounded-lg border border-[#c0c8cb] px-4 py-2 text-xs">
+                  Request Extension
+                </button>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-[#d8dcdf] bg-white p-4">
+              <p className="text-[30px] font-semibold">$320.00</p>
+              <p className="text-[20px] text-[#3f474b]">
+                Owed to: Sarah Jenkins
+              </p>
+              <div className="mt-3 flex gap-2">
+                <button className="rounded-lg bg-[#904d00] px-4 py-2 text-xs font-medium text-white">
+                  Repay Now
+                </button>
+                <button className="rounded-lg border border-[#c0c8cb] px-4 py-2 text-xs">
+                  Chat
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </MainLayout>
   );
 }

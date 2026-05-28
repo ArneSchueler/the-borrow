@@ -1,0 +1,428 @@
+<!doctype html>
+<html class="light" lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TheBorrow - Neue Transaktion</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#40484b",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#8abed1",
+              "surface-tint": "#306576",
+              "on-secondary-fixed": "#2f1500",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e3e2e1",
+              "primary-fixed-dim": "#9acee1",
+              "on-primary-fixed": "#001f28",
+              "secondary-fixed": "#ffdcc3",
+              "secondary-fixed-dim": "#ffb77d",
+              surface: "#faf9f8",
+              "secondary-container": "#fe932c",
+              "on-secondary-container": "#663500",
+              "on-secondary": "#ffffff",
+              "tertiary-container": "#77340e",
+              "tertiary-fixed-dim": "#ffb693",
+              "surface-dim": "#dadad9",
+              "surface-container-highest": "#e3e2e1",
+              "primary-fixed": "#b6ebfe",
+              "on-background": "#1a1c1c",
+              "on-primary-fixed-variant": "#124d5d",
+              "on-error-container": "#93000a",
+              background: "#faf9f8",
+              secondary: "#904d00",
+              "tertiary-fixed": "#ffdbcc",
+              primary: "#003644",
+              "outline-variant": "#c0c8cb",
+              tertiary: "#582000",
+              "inverse-on-surface": "#f1f0f0",
+              "primary-container": "#134e5e",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#fe9f71",
+              "inverse-surface": "#2f3130",
+              "on-primary": "#ffffff",
+              error: "#ba1a1a",
+              "inverse-primary": "#9acee1",
+              "on-tertiary-fixed-variant": "#76330d",
+              "surface-container": "#eeeeed",
+              "surface-container-high": "#e9e8e7",
+              "on-secondary-fixed-variant": "#6e3900",
+              "surface-bright": "#faf9f8",
+              outline: "#70787c",
+              "on-surface": "#1a1c1c",
+              "surface-container-low": "#f4f3f2",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#351000",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "container-padding-mobile": "20px",
+              gutter: "24px",
+              "container-padding-desktop": "40px",
+              base: "8px",
+              "section-gap": "64px",
+            },
+            fontFamily: {
+              "body-lg": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "title-md": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-sm": [
+                "13px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .active-tab-indicator {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      input:focus {
+        outline: none;
+        box-shadow:
+          0 0 0 2px #003644,
+          0 0 0 4px #faf9f8;
+      }
+      .segmented-control-active {
+        transform: translateX(0);
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface font-body-md text-on-surface min-h-screen flex flex-col"
+  >
+    <!-- Top Navigation Anchor -->
+    <nav
+      class="sticky top-0 z-50 bg-surface flex justify-between items-center w-full px-5 py-4 border-b border-outline-variant"
+    >
+      <button
+        aria-label="Zurück"
+        class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors"
+      >
+        <span class="material-symbols-outlined text-on-surface"
+          >arrow_back</span
+        >
+      </button>
+      <h1 class="font-title-md text-title-md font-bold text-primary">
+        Neue Transaktion
+      </h1>
+      <div class="w-10"></div>
+      <!-- Spacer for symmetry -->
+    </nav>
+    <!-- Main Content Scroll Area -->
+    <main class="flex-1 overflow-y-auto px-5 pt-8 pb-48">
+      <div class="max-w-md mx-auto space-y-8">
+        <!-- Segmented Control for Transaction Type -->
+        <div class="space-y-3">
+          <p class="font-label-sm text-label-sm text-on-surface-variant px-1">
+            Art der Leihe
+          </p>
+          <div
+            class="relative flex p-1 bg-surface-container rounded-xl h-14 items-center"
+          >
+            <div
+              class="absolute w-[calc(50%-4px)] h-[calc(100%-8px)] bg-surface-container-lowest rounded-lg shadow-sm active-tab-indicator"
+              id="segment-indicator"
+              style="transform: translateX(0)"
+            ></div>
+            <button
+              class="relative flex-1 text-center font-label-sm text-label-sm font-semibold z-10 text-primary transition-colors h-full flex items-center justify-center"
+              onclick="switchSegment(0)"
+            >
+              Geld
+            </button>
+            <button
+              class="relative flex-1 text-center font-label-sm text-label-sm font-semibold z-10 text-on-surface-variant transition-colors h-full flex items-center justify-center"
+              onclick="switchSegment(1)"
+            >
+              Gegenstand
+            </button>
+          </div>
+        </div>
+        <!-- Form Fields Stack -->
+        <form class="space-y-6">
+          <!-- Transaction Title -->
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="title"
+              >Bezeichnung</label
+            >
+            <input
+              class="w-full h-14 px-4 rounded-lg bg-[#F5F2ED] border-none text-body-md font-body-md placeholder-outline"
+              id="title"
+              placeholder="z.B. Miete oder Bohrmaschine"
+              type="text"
+            />
+          </div>
+          <!-- Amount / Object Details (Dynamic Context) -->
+          <div class="space-y-2" id="amount-field">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="amount"
+              >Betrag</label
+            >
+            <div class="relative">
+              <input
+                class="w-full h-14 pl-4 pr-12 rounded-lg bg-[#F5F2ED] border-none text-body-md font-body-md"
+                id="amount"
+                placeholder="0,00"
+                type="number"
+              />
+              <span
+                class="absolute right-4 top-1/2 -translate-y-1/2 font-body-md text-on-surface-variant"
+                >€</span
+              >
+            </div>
+          </div>
+          <!-- Contact Picker -->
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="contact"
+              >Kontakt</label
+            >
+            <div class="relative">
+              <input
+                class="w-full h-14 pl-12 pr-4 rounded-lg bg-[#F5F2ED] border-none text-body-md font-body-md"
+                id="contact"
+                placeholder="Name auswählen"
+                type="text"
+              />
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                >person_add</span
+              >
+            </div>
+          </div>
+          <!-- Date Picker with large touch target -->
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="date"
+              >Fälligkeitsdatum</label
+            >
+            <div class="relative">
+              <input
+                class="w-full h-14 pl-12 pr-4 rounded-lg bg-[#F5F2ED] border-none text-body-md font-body-md appearance-none"
+                id="date"
+                type="date"
+              />
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                >calendar_today</span
+              >
+            </div>
+          </div>
+          <!-- Notes / Description -->
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="notes"
+              >Notizen (optional)</label
+            >
+            <textarea
+              class="w-full p-4 rounded-lg bg-[#F5F2ED] border-none text-body-md font-body-md resize-none"
+              id="notes"
+              placeholder="Zusätzliche Details hinzufügen..."
+              rows="3"
+            ></textarea>
+          </div>
+        </form>
+        <!-- Visual Decorative Card (Subtle Burrow Metaphor) -->
+        <div
+          class="rounded-2xl bg-surface-container-low border border-outline-variant p-6 flex items-center gap-4"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center"
+          >
+            <span
+              class="material-symbols-outlined text-on-primary-container"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >security</span
+            >
+          </div>
+          <div>
+            <h3 class="font-body-md text-body-md font-bold text-on-surface">
+              Sichere Leihe
+            </h3>
+            <p class="font-label-sm text-label-sm text-on-surface-variant">
+              Alle Transaktionen werden privat und sicher im Borrow-Protokoll
+              gespeichert.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Fixed Bottom Action Area -->
+    <footer
+      class="fixed left-0 right-0 p-5 bg-surface/80 backdrop-blur-md border-t border-outline-variant bottom-20"
+    >
+      <div class="max-w-md mx-auto flex gap-4">
+        <button
+          class="flex-1 h-14 rounded-full border border-primary text-primary font-body-md font-bold hover:bg-primary/5 transition-all active:scale-95"
+        >
+          Abbrechen
+        </button>
+        <button
+          class="flex-1 h-14 rounded-full bg-primary text-on-primary font-body-md font-bold shadow-lg hover:opacity-90 transition-all active:scale-95"
+        >
+          Speichern
+        </button>
+      </div>
+    </footer>
+    <!-- Script for micro-interactions -->
+    <script>
+      function switchSegment(index) {
+        const indicator = document.getElementById("segment-indicator");
+        const buttons = indicator.parentElement.querySelectorAll("button");
+        const amountLabel = document.querySelector('label[for="amount"]');
+        const amountInput = document.getElementById("amount");
+        const amountContainer = document.getElementById("amount-field");
+        const euroSign = amountInput.nextElementSibling;
+
+        // Animate indicator
+        if (index === 0) {
+          indicator.style.transform = "translateX(0)";
+          buttons[0].classList.replace(
+            "text-on-surface-variant",
+            "text-primary",
+          );
+          buttons[1].classList.replace(
+            "text-primary",
+            "text-on-surface-variant",
+          );
+
+          // Update Context for Money
+          amountLabel.innerText = "Betrag";
+          amountInput.placeholder = "0,00";
+          amountInput.type = "number";
+          euroSign.style.display = "block";
+        } else {
+          indicator.style.transform = "translateX(calc(100% + 8px))";
+          buttons[1].classList.replace(
+            "text-on-surface-variant",
+            "text-primary",
+          );
+          buttons[0].classList.replace(
+            "text-primary",
+            "text-on-surface-variant",
+          );
+
+          // Update Context for Object
+          amountLabel.innerText = "Zustand / Wert";
+          amountInput.placeholder = "z.B. Neuwertig";
+          amountInput.type = "text";
+          euroSign.style.display = "none";
+        }
+      }
+    </script>
+
+    <nav
+      class="fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant md:hidden"
+    >
+      <div class="flex justify-around items-center h-20 px-4">
+        <!-- Dashboard -->
+        <a
+          class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant transition-all px-4 py-2 rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="dashboard"
+            >dashboard</span
+          >
+          <span class="font-label-sm text-label-sm">Dashboard</span>
+        </a>
+        <!-- Lent -->
+        <a
+          class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant transition-all px-4 py-2 rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="upload_file"
+            >upload_file</span
+          >
+          <span class="font-label-sm text-label-sm">Verliehen</span>
+        </a>
+        <!-- Borrowed -->
+        <a
+          class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant transition-all px-4 py-2 rounded-lg"
+          href="#"
+        >
+          <span class="material-symbols-outlined" data-icon="download"
+            >download</span
+          >
+          <span class="font-label-sm text-label-sm">Geliehen</span>
+        </a>
+        <!-- Settings -->
+      </div>
+    </nav>
+  </body>
+</html>

@@ -49,8 +49,8 @@ export default function LoginPage() {
       </header>
 
       <main className="mx-auto w-full max-w-[1120px] px-5 pb-12 pt-8 lg:flex lg:min-h-screen lg:items-center lg:px-6 lg:py-10">
-        <div className="grid w-full overflow-hidden rounded-xl border border-[#c0c8cb] bg-white shadow-[0_20px_40px_-15px_rgba(0,54,68,0.04)] lg:min-h-[640px] lg:grid-cols-2">
-          <section className="relative hidden overflow-hidden bg-[#003644] p-12 lg:flex lg:flex-col lg:justify-between">
+        <div className="grid w-full overflow-hidden rounded-xl border border-[#c0c8cb] bg-white shadow-[0_20px_40px_-15px_rgba(0,54,68,0.04)] lg:min-h-[640px] lg:grid-cols-[1fr_1fr]">
+          <section className="relative hidden overflow-hidden bg-[#003f4f] p-12 lg:flex lg:flex-col lg:justify-between">
             <div className="absolute inset-0 opacity-10">
               <div className="h-full w-full bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[28px_28px]" />
             </div>
@@ -70,7 +70,7 @@ export default function LoginPage() {
             </div>
           </section>
 
-          <section className="flex flex-col justify-center bg-white p-6 md:p-10 lg:p-16">
+          <section className="flex flex-col justify-center bg-white p-6 md:p-10 lg:p-14">
             <div className="mb-10 flex flex-col items-center gap-2 lg:hidden">
               <p className="text-2xl font-black text-[#003644]">TheBorrow</p>
             </div>
@@ -87,9 +87,9 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <div className="mb-10 text-center">
-                <h2 className="text-3xl font-semibold text-[#1a1c1c]">Welcome Back</h2>
-                <p className="mt-2 text-[#40484b]">Log in to your secure burrow dashboard.</p>
+              <div className="mb-10 text-left">
+                <h2 className="text-[44px] font-semibold leading-tight text-[#1a1c1c]">Welcome Back</h2>
+                <p className="mt-2 text-[22px] text-[#40484b]">Log in to your secure burrow dashboard.</p>
               </div>
 
               <form action={onSubmit} className="space-y-6">
@@ -141,7 +141,7 @@ export default function LoginPage() {
                 <div className="space-y-3">
                   <Button
                     type="submit"
-                    className="h-12 w-full bg-[#003644] text-white hover:brightness-110"
+                    className="h-12 w-full bg-[#003f4f] text-white hover:brightness-110"
                     disabled={loading}
                   >
                     {loading ? "Logging in..." : "Jetzt Anmelden"}
