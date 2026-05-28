@@ -1,0 +1,414 @@
+<!doctype html>
+<html class="light" lang="de" style="">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TheBorrow - Willkommen</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#40484b",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#8abed1",
+              "surface-tint": "#306576",
+              "on-secondary-fixed": "#2f1500",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e3e2e1",
+              "primary-fixed-dim": "#9acee1",
+              "on-primary-fixed": "#001f28",
+              "secondary-fixed": "#ffdcc3",
+              "secondary-fixed-dim": "#ffb77d",
+              surface: "#faf9f8",
+              "secondary-container": "#fe932c",
+              "on-secondary-container": "#663500",
+              "on-secondary": "#ffffff",
+              "tertiary-container": "#77340e",
+              "tertiary-fixed-dim": "#ffb693",
+              "surface-dim": "#dadad9",
+              "surface-container-highest": "#e3e2e1",
+              "primary-fixed": "#b6ebfe",
+              "on-background": "#1a1c1c",
+              "on-primary-fixed-variant": "#124d5d",
+              "on-error-container": "#93000a",
+              background: "#faf9f8",
+              secondary: "#904d00",
+              "tertiary-fixed": "#ffdbcc",
+              primary: "#003644",
+              "outline-variant": "#c0c8cb",
+              tertiary: "#582000",
+              "inverse-on-surface": "#f1f0f0",
+              "primary-container": "#134e5e",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#fe9f71",
+              "inverse-surface": "#2f3130",
+              "on-primary": "#ffffff",
+              error: "#ba1a1a",
+              "inverse-primary": "#9acee1",
+              "on-tertiary-fixed-variant": "#76330d",
+              "surface-container": "#eeeeed",
+              "surface-container-high": "#e9e8e7",
+              "on-secondary-fixed-variant": "#6e3900",
+              "surface-bright": "#faf9f8",
+              outline: "#70787c",
+              "on-surface": "#1a1c1c",
+              "surface-container-low": "#f4f3f2",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#351000",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "container-padding-mobile": "20px",
+              gutter: "24px",
+              "container-padding-desktop": "40px",
+              base: "8px",
+              "section-gap": "64px",
+            },
+            fontFamily: {
+              "body-lg": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "title-md": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-sm": [
+                "13px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #faf9f8;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        vertical-align: middle;
+      }
+      .login-card {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .tab-active {
+        border-bottom: 2px solid #003644;
+        color: #003644;
+        font-weight: 600;
+      }
+      .input-focus-ring:focus-within {
+        ring: 2px solid #003644;
+        ring-offset: 2px;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="antialiased text-on-surface font-body-md overflow-x-hidden">
+    <!-- Brand Header Element (Mobile Focus) -->
+    <header
+      class="relative h-48 w-full bg-primary overflow-hidden flex flex-col p-6 justify-center items-center"
+    >
+      <div class="absolute inset-0 opacity-20">
+        <img
+          class="w-full h-full object-cover grayscale brightness-50"
+          data-alt="A serene architectural interior featuring soft shadows and minimalist concrete walls, bathed in deep forest teal and warm morning light. The composition is calm and grounded, reflecting a modern burrow aesthetic with intentional whitespace and natural textures."
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj33nUU-jCJ1Mhr9pXqOeqx3CTqu9NmD1fS0eBXl285gpSFIuAtXe4h1atO62qSHdHZd2AUGTavHRVdOlEyTowbUAUdbHuNztYSEfMypLrO-oYUhQFBqv6UVWoMDK9LtIBByIqZP2aV-9lqUUqyysGzACb46ik2RYZVl3CkHi2WzFYg7KKaDJFjd6oReRFf1_zsGv3Npuq3VH6QVAViUu8tV7ZTpAANAbLXZvkjUa2lEZlRybIJGqEYFX8S0PGSm3wS32s9Y8nXA"
+        />
+      </div>
+      <div class="relative z-10">
+        <div class="flex items-center gap-2 justify-center mb-4">
+          <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjbPsOiyKYmIpWzzIwJXNQcQOWvwzJsVY2URUQvaKkGXaoCrBO9sNes05ax4MJgO5a_RwCA16LYZkBx7YwI6WXfoG0Qf5_lJbglUgbWSIPqZecfzkwOO145wvmpmDwKkPBqu2CzS57kHEkwnnVUlu9At8AVHJnALk16okJgkRzu4jxXap9ppnR7JBrxoM8ybyxNuo2radedvi3q6NvW_w24J8zN6Dl3TBqpsPM8LYMjDx9-KgAKNQ-uRyc5U7ov8hzbkNauHS9YA"
+            alt="TheBorrow Logo"
+            class="w-auto object-contain h-16"
+          />
+        </div>
+        <h1
+          class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed leading-tight text-center"
+        >
+          Willkommen!
+        </h1>
+      </div>
+    </header>
+    <main class="px-container-padding-mobile relative z-20 pb-12 mt-8">
+      <div
+        class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-gutter"
+      >
+        <!-- Auth Toggle Tabs -->
+        <div class="flex w-full mb-8 border-b border-outline-variant">
+          <button
+            class="flex-1 py-3 font-label-sm text-label-sm text-center tab-active transition-all"
+            id="tab-login"
+            onclick="switchTab('login')"
+          >
+            Anmelden
+          </button>
+          <button
+            class="flex-1 py-3 font-label-sm text-label-sm text-center text-outline hover:text-primary transition-all"
+            id="tab-register"
+            onclick="switchTab('register')"
+          >
+            Registrieren
+          </button>
+        </div>
+        <!-- Login Form -->
+        <form class="space-y-6 block" id="form-login">
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="login-email"
+              >E-Mail Adresse</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                >mail</span
+              >
+              <input
+                class="w-full pl-12 pr-4 py-4 bg-[#F5F2ED] border-none rounded-lg focus:ring-2 focus:ring-primary text-body-md font-body-md transition-all"
+                id="login-email"
+                placeholder="name@beispiel.de"
+                type="email"
+              />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="login-password"
+              >Passwort</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                >lock</span
+              >
+              <input
+                class="w-full pl-12 pr-12 py-4 bg-[#F5F2ED] border-none rounded-lg focus:ring-2 focus:ring-primary text-body-md font-body-md transition-all"
+                id="login-password"
+                placeholder="••••••••"
+                type="password"
+              />
+              <button
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors"
+                type="button"
+              >
+                <span class="material-symbols-outlined">visibility</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between py-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary"
+                type="checkbox"
+              />
+              <span class="font-label-sm text-label-sm text-on-surface-variant"
+                >Angemeldet bleiben</span
+              >
+            </label>
+            <a
+              class="font-label-sm text-label-sm text-primary font-semibold"
+              href="#"
+              >Passwort vergessen?</a
+            >
+          </div>
+          <button
+            class="w-full bg-primary text-on-primary py-4 rounded-lg font-title-md text-title-md hover:brightness-110 active:scale-95 transition-all shadow-sm"
+            type="submit"
+          >
+            Jetzt Anmelden
+          </button>
+        </form>
+        <!-- Register Form (Hidden by default) -->
+        <form class="space-y-6 hidden" id="form-register">
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="reg-name"
+              >Vollständiger Name</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                >person</span
+              >
+              <input
+                class="w-full pl-12 pr-4 py-4 bg-[#F5F2ED] border-none rounded-lg focus:ring-2 focus:ring-primary text-body-md font-body-md transition-all"
+                id="reg-name"
+                placeholder="Max Mustermann"
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="reg-email"
+              >E-Mail Adresse</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                >mail</span
+              >
+              <input
+                class="w-full pl-12 pr-4 py-4 bg-[#F5F2ED] border-none rounded-lg focus:ring-2 focus:ring-primary text-body-md font-body-md transition-all"
+                id="reg-email"
+                placeholder="name@beispiel.de"
+                type="email"
+              />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label
+              class="font-label-sm text-label-sm text-on-surface-variant px-1"
+              for="reg-password"
+              >Passwort wählen</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+                >lock</span
+              >
+              <input
+                class="w-full pl-12 pr-4 py-4 bg-[#F5F2ED] border-none rounded-lg focus:ring-2 focus:ring-primary text-body-md font-body-md transition-all"
+                id="reg-password"
+                placeholder="Mind. 8 Zeichen"
+                type="password"
+              />
+            </div>
+          </div>
+          <p
+            class="font-label-sm text-label-sm text-on-surface-variant leading-relaxed px-1"
+          >
+            Mit der Registrierung akzeptieren Sie unsere
+            <a class="text-primary underline" href="#">AGB</a> und
+            <a class="text-primary underline" href="#"
+              >Datenschutzbestimmungen</a
+            >.
+          </p>
+          <button
+            class="w-full bg-primary text-on-primary py-4 rounded-lg font-title-md text-title-md hover:brightness-110 active:scale-95 transition-all shadow-sm"
+            type="submit"
+          >
+            Konto erstellen
+          </button>
+        </form>
+        <!-- Social Login Divider -->
+
+        <!-- Social Buttons -->
+      </div>
+      <!-- Help Footer -->
+      <div class="mt-8 text-center">
+        <p class="font-body-md text-body-md text-on-surface-variant">
+          Benötigen Sie Hilfe?
+          <a class="text-primary font-semibold hover:underline" href="#"
+            >Support kontaktieren</a
+          >
+        </p>
+        <div class="mt-4 flex justify-center gap-6">
+          <span class="font-label-sm text-label-sm text-outline"
+            >Impressum</span
+          >
+          <span class="font-label-sm text-label-sm text-outline"
+            >Datenschutz</span
+          >
+        </div>
+      </div>
+    </main>
+    <script>
+      function switchTab(type) {
+        const loginForm = document.getElementById("form-login");
+        const regForm = document.getElementById("form-register");
+        const loginTab = document.getElementById("tab-login");
+        const regTab = document.getElementById("tab-register");
+
+        if (type === "login") {
+          loginForm.classList.remove("hidden");
+          regForm.classList.add("hidden");
+          loginTab.classList.add("tab-active");
+          loginTab.classList.remove("text-outline");
+          regTab.classList.remove("tab-active");
+          regTab.classList.add("text-outline");
+        } else {
+          loginForm.classList.add("hidden");
+          regForm.classList.remove("hidden");
+          regTab.classList.add("tab-active");
+          regTab.classList.remove("text-outline");
+          loginTab.classList.remove("tab-active");
+          loginTab.classList.add("text-outline");
+        }
+      }
+
+      // Add micro-interaction to buttons
+      document.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("touchstart", () =>
+          btn.classList.add("opacity-80"),
+        );
+        btn.addEventListener("touchend", () =>
+          btn.classList.remove("opacity-80"),
+        );
+      });
+    </script>
+  </body>
+</html>

@@ -1,12 +1,17 @@
-import { auth } from "./auth";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl));
+export async function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname.startsWith("/dashboard")) {
+    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+    }
   }
-});
+}
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ["/dashboard/:path*"],
 };

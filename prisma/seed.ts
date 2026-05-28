@@ -1,5 +1,17 @@
 import bcrypt from "bcryptjs";
-import prisma from "../lib/db.js";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL is not set");
+}
+
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const hashedPassword = await bcrypt.hash("password123", 10);
@@ -7,7 +19,10 @@ async function main() {
   // 1. Upsert a primary test user
   const testUser = await prisma.user.upsert({
     where: { email: "testuser@example.com" },
-    update: {},
+    update: {
+      name: "Jane Doe",
+      password: hashedPassword,
+    },
     create: {
       email: "testuser@example.com",
       name: "Jane Doe",

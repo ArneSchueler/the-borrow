@@ -1,0 +1,445 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>TheBorrow - Secure Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#dadad9",
+              "on-tertiary-fixed": "#351000",
+              surface: "#faf9f8",
+              "on-secondary-fixed": "#2f1500",
+              "primary-container": "#134e5e",
+              "inverse-primary": "#9acee1",
+              "surface-container-highest": "#e3e2e1",
+              "on-secondary-container": "#663500",
+              "surface-bright": "#faf9f8",
+              "tertiary-container": "#77340e",
+              "surface-variant": "#e3e2e1",
+              "inverse-on-surface": "#f1f0f0",
+              "on-primary-fixed": "#001f28",
+              secondary: "#904d00",
+              background: "#faf9f8",
+              "inverse-surface": "#2f3130",
+              primary: "#003644",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#124d5d",
+              "on-surface": "#1a1c1c",
+              "surface-container-high": "#e9e8e7",
+              "tertiary-fixed": "#ffdbcc",
+              "surface-container": "#eeeeed",
+              outline: "#70787c",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-surface-variant": "#40484b",
+              "on-tertiary-fixed-variant": "#76330d",
+              "secondary-fixed": "#ffdcc3",
+              "primary-fixed-dim": "#9acee1",
+              "on-secondary-fixed-variant": "#6e3900",
+              "surface-tint": "#306576",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#8abed1",
+              "primary-fixed": "#b6ebfe",
+              "outline-variant": "#c0c8cb",
+              "secondary-fixed-dim": "#ffb77d",
+              "secondary-container": "#fe932c",
+              "on-tertiary-container": "#fe9f71",
+              "on-error-container": "#93000a",
+              "on-background": "#1a1c1c",
+              tertiary: "#582000",
+              "surface-container-low": "#f4f3f2",
+              "tertiary-fixed-dim": "#ffb693",
+              "on-secondary": "#ffffff",
+              error: "#ba1a1a",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "section-gap": "64px",
+              base: "8px",
+              "container-padding-desktop": "40px",
+              gutter: "24px",
+              "container-padding-mobile": "20px",
+            },
+            fontFamily: {
+              "body-md": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-lg": ["Inter"],
+              "title-md": ["Inter"],
+              "display-lg": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "label-sm": [
+                "13px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "title-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "600",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .auth-card-shadow {
+        box-shadow: 0 20px 40px -15px rgba(0, 54, 68, 0.04);
+      }
+      body {
+        background-color: #faf9f8;
+        color: #1a1c1c;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden"
+  >
+    <!-- Auth Layout Wrapper -->
+    <main class="flex-grow flex items-center justify-center p-gutter lg:p-0">
+      <div
+        class="w-full max-w-[1120px] bg-surface-container-lowest grid grid-cols-1 lg:grid-cols-2 min-h-[640px] rounded-xl overflow-hidden auth-card-shadow border border-outline-variant"
+      >
+        <!-- Visual Brand Side (Split View Left) -->
+        <div
+          class="relative hidden lg:flex flex-col justify-between p-12 bg-primary overflow-hidden"
+        >
+          <!-- Abstract Background Pattern -->
+          <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg
+              height="100%"
+              viewbox="0 0 400 400"
+              width="100%"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="200"
+                cy="200"
+                fill="none"
+                r="150"
+                stroke="white"
+                stroke-width="0.5"
+              ></circle>
+              <circle
+                cx="200"
+                cy="200"
+                fill="none"
+                r="100"
+                stroke="white"
+                stroke-width="0.5"
+              ></circle>
+              <path
+                d="M0 200h400M200 0v400"
+                stroke="white"
+                stroke-width="0.5"
+              ></path>
+            </svg>
+          </div>
+          <div class="z-10">
+            <div class="flex items-center gap-2 mb-8">
+              <img
+                alt="TheBorrow Logo"
+                class="h-10 w-auto object-contain"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIsCLzC1S3llRKT-WcMlI-rA8M6KaCY-Gxg7heQSPJOf5tbZWFa7pchYl9da2Pn6pz0J_4wpj53FbVJN6uQi5Lgynx1OumlUQ6xjfoo9eeqcYmzZNw2tr90Nfi6QW3zabCoDRrAfKyBriEiZf7GdX4hI1Vg5p0QLg5huJ6AXNGdGYoPvbRY_-twTFzQlgLQc0XgdZpV2EqK30wiYeHf88d0cpl72fx9z6gsfDPx0HXfYMC533D8XRUm1-a4ioAUkMlnBlw9cpmLw"
+              />
+              <span
+                class="font-title-md text-title-md font-black text-white tracking-tight"
+                >TheBorrow</span
+              >
+            </div>
+            <h1
+              class="font-display-lg text-display-lg text-white mb-6 max-w-sm leading-tight"
+            >
+              Financial clarity for the modern burrow.
+            </h1>
+            <p
+              class="text-on-primary-container font-body-lg text-body-lg max-w-xs opacity-90"
+            >
+              Securely manage your lending and borrowing with communal trust and
+              crystal-clear organization.
+            </p>
+          </div>
+          <div
+            class="z-10 bg-primary-container p-6 rounded-lg border border-white/10 backdrop-blur-sm"
+          >
+            <p
+              class="text-on-primary-container italic font-body-md text-body-md mb-4"
+            >
+              "TheBorrow transformed how our neighborhood handles small loans.
+              It's clean, transparent, and grounded in trust."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden"
+              >
+                <img
+                  alt="User"
+                  class="w-full h-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSG3SANjXeu2nssnVkJPf5aTMr0pG9I70PMJd5Yq6QQQBKrTHoq4yJOQzOR6nYZlsqRQhRnr9fdKJ9ThRxij5dmUBYV7bTW77F9ZI54F5QQEUPNgGIY-xkMugQvZV18uNKpTtEs987ipTM_Gf8lvB0TqxUcxH1lJVefzQRaOS1LRvgi_ggTDuuSQ12-Ste1vTbnnM3Ssxi4K64E8ahlOX-nvqz6dSOxDJ1SLdpVjbuczNvezonAQAzY6patNUHwdy4XiWeVghlZw"
+                />
+              </div>
+              <div>
+                <p class="text-white font-label-sm text-label-sm font-bold">
+                  Marcus Chen
+                </p>
+                <p
+                  class="text-on-primary-container font-label-sm text-label-sm"
+                >
+                  Community Lead
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative Image Component -->
+          <div
+            class="absolute bottom-[-10%] right-[-10%] w-2/3 h-1/2 opacity-20 rotate-12 pointer-events-none"
+          >
+            <img
+              class="w-full h-full object-cover rounded-xl grayscale"
+              data-alt="A serene and highly minimalist macro photograph of smooth, layered natural stones in earthy taupe and forest teal colors, arranged in a stable stack against a soft white background. The lighting is diffused and warm, creating a calm and professional atmosphere that symbolizes financial stability and trust."
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC39An7tH8wrz7Z4sy6GP9CrTRdOPvUUH4RNRdMfElZS-VTJtGtks8HVkDpBQ-S0TFD1u7MHOrNJ2NlfFwGbKu5HBROXvQ5Sgia11ziCSYiScd-Cw53-y1paC9tvybo6-A0qw4pARIIHhqohxUtHErDecrWdxF4uyoLeKg4LHbSdLUw-Ow7dWH3MLitWQz0ybiWJqu6lLl6vZ3tYB23QzGLxG0QBlmyui1g_TVOFEHXqDgajKvtLR1gSm4ICOg-QCD4Su7MCdwX5w"
+            />
+          </div>
+        </div>
+        <!-- Interaction Side (Split View Right) -->
+        <div
+          class="flex flex-col justify-center p-8 md:p-16 lg:p-24 bg-surface-container-lowest"
+        >
+          <div
+            class="mb-10 lg:hidden items-center gap-2 flex-col flex justify-center"
+          >
+            <img
+              alt="TheBorrow Logo"
+              class="h-16 w-auto object-contain"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIsCLzC1S3llRKT-WcMlI-rA8M6KaCY-Gxg7heQSPJOf5tbZWFa7pchYl9da2Pn6pz0J_4wpj53FbVJN6uQi5Lgynx1OumlUQ6xjfoo9eeqcYmzZNw2tr90Nfi6QW3zabCoDRrAfKyBriEiZf7GdX4hI1Vg5p0QLg5huJ6AXNGdGYoPvbRY_-twTFzQlgLQc0XgdZpV2EqK30wiYeHf88d0cpl72fx9z6gsfDPx0HXfYMC533D8XRUm1-a4ioAUkMlnBlw9cpmLw"
+            />
+            <span class="font-title-md text-title-md font-black text-primary"
+              >TheBorrow</span
+            >
+          </div>
+          <div class="max-w-[400px] mx-auto w-full">
+            <div class="text-center mb-12">
+              <h2
+                class="font-headline-lg text-headline-lg text-on-surface mb-2"
+              >
+                Welcome Back
+              </h2>
+              <p class="text-on-surface-variant font-body-md text-body-md">
+                Log in to your secure burrow dashboard.
+              </p>
+            </div>
+            <form class="space-y-6" id="loginForm" onsubmit="return false;">
+              <div class="space-y-2">
+                <label
+                  class="block font-label-sm text-label-sm text-on-surface-variant"
+                  for="email"
+                  >Email Address</label
+                >
+                <div class="relative group">
+                  <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors"
+                    >mail</span
+                  >
+                  <input
+                    class="w-full pl-12 pr-4 py-3.5 bg-[#F5F2ED] border-transparent rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md text-body-md outline-none"
+                    id="email"
+                    name="email"
+                    placeholder="name@example.com"
+                    required=""
+                    type="email"
+                  />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                  <label
+                    class="block font-label-sm text-label-sm text-on-surface-variant"
+                    for="password"
+                    >Password</label
+                  >
+                  <a
+                    class="font-label-sm text-label-sm text-primary hover:underline"
+                    href="#"
+                    >Forgot password?</a
+                  >
+                </div>
+                <div class="relative group">
+                  <span
+                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors"
+                    >lock</span
+                  >
+                  <input
+                    class="w-full pl-12 pr-12 py-3.5 bg-[#F5F2ED] border-transparent rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md text-body-md outline-none"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required=""
+                    type="password"
+                  />
+                  <button
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined">visibility</span>
+                  </button>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 py-2">
+                <input
+                  class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer"
+                  id="remember"
+                  type="checkbox"
+                />
+                <label
+                  class="font-label-sm text-label-sm text-on-surface-variant cursor-pointer"
+                  for="remember"
+                  >Keep me logged in for 30 days</label
+                >
+              </div>
+              <button
+                class="w-full bg-primary text-on-primary py-4 rounded-lg font-title-md text-title-md hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all shadow-md flex items-center justify-center gap-2 group"
+                type="submit"
+              >
+                Access Dashboard
+                <span
+                  class="material-symbols-outlined transition-transform group-hover:translate-x-1"
+                  >arrow_forward</span
+                >
+              </button>
+            </form>
+            <div
+              class="mt-10 pt-10 border-t border-outline-variant text-center"
+            >
+              <p class="text-on-surface-variant font-body-md text-body-md">
+                New to the burrow?
+                <a class="text-primary font-bold hover:underline" href="#"
+                  >Create an Account</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer Simple Links -->
+    <footer
+      class="py-8 px-container-padding-desktop flex flex-col md:flex-row justify-between items-center gap-4"
+    >
+      <div class="flex gap-6">
+        <a
+          class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="#"
+          >Privacy Policy</a
+        >
+        <a
+          class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="#"
+          >Terms of Service</a
+        >
+        <a
+          class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          href="#"
+          >Support</a
+        >
+      </div>
+      <p class="font-label-sm text-label-sm text-outline">
+        © 2024 TheBorrow Financial. All rights reserved.
+      </p>
+    </footer>
+    <script>
+      // Simple Micro-interaction for form submission
+      const form = document.getElementById("loginForm");
+      form.addEventListener("submit", (e) => {
+        const btn = form.querySelector('button[type="submit"]');
+        const originalContent = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML =
+          '<span class="material-symbols-outlined animate-spin">progress_activity</span> Authenticating...';
+
+        setTimeout(() => {
+          btn.innerHTML =
+            '<span class="material-symbols-outlined">check_circle</span> Success';
+          btn.classList.remove("bg-primary");
+          btn.classList.add("bg-secondary");
+
+          setTimeout(() => {
+            alert("Login successful! Redirecting to dashboard...");
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+            btn.classList.add("bg-primary");
+            btn.classList.remove("bg-secondary");
+          }, 1000);
+        }, 1500);
+      });
+
+      // Toggle visibility micro-interaction
+      const passToggle = document.querySelector('button[type="button"]');
+      const passInput = document.getElementById("password");
+      passToggle.addEventListener("click", () => {
+        const isPass = passInput.type === "password";
+        passInput.type = isPass ? "text" : "password";
+        passToggle.querySelector(".material-symbols-outlined").innerText =
+          isPass ? "visibility_off" : "visibility";
+      });
+    </script>
+  </body>
+</html>
