@@ -12,6 +12,7 @@ export default async function DashboardPage() {
 
   return (
     <MainLayout>
+      {/* mobile */}
       <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
         <section>
           <h1 className="text-[40px] font-bold leading-none text-[#0d4f63]">
@@ -116,7 +117,8 @@ export default async function DashboardPage() {
         </section>
       </div>
 
-      <div className="hidden md:block mx-auto w-full max-w-6xl px-container-desktop pb-10 pt-8 space-y-section-gap">
+      {/* desktop */}
+      <div className="hidden md:block mx-auto w-full max-w-6xl px-container-desktop  pb-10 pt-8 space-y-section-gap">
         <section className="flex items-start justify-between">
           <div>
             <h2 className="text-display-lg text-primary">Overview</h2>
@@ -124,43 +126,29 @@ export default async function DashboardPage() {
               Manage your trust and shared assets in one place.
             </p>
           </div>
-          <div className="flex gap-4">
-            <div className="w-[210px] rounded-lg border border-outline-variant bg-surface-container-high p-5 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
-              <p className="text-label-sm uppercase tracking-widest text-outline">
-                Total Lent
-              </p>
-              <p className="mt-2 text-display-lg font-bold text-primary tabular-nums">
-                3
-              </p>
-              <p className="text-headline-lg font-semibold text-primary leading-none">
-                Transactions
-              </p>
+          <section className="grid grid-cols-2 gap-3">
+            <div className="w-[210px] rounded-2xl bg-[#0d566b] p-4 text-white shadow-sm">
+              <p className="text-[13px] opacity-95">Verliehen</p>
+              <p className="mt-2 text-[39px] font-bold leading-none">2</p>
+              <p className="mt-1 text-[22px]">Vorgange</p>
             </div>
-            <div className="w-[210px] rounded-lg border border-outline-variant bg-surface-container-high p-5 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
-              <p className="text-label-sm uppercase tracking-widest text-outline">
-                Total Borrowed
-              </p>
-              <p className="mt-2 text-display-lg font-bold text-secondary tabular-nums">
-                2
-              </p>
-              <p className="text-headline-lg font-semibold text-secondary leading-none">
-                Transactions
-              </p>
+            <div className="w-[210px] rounded-2xl bg-[#f7952f] p-4 text-[#3a230e] shadow-sm">
+              <p className="text-[13px] opacity-95">Geliehen</p>
+              <p className="mt-2 text-[39px] font-bold leading-none">1</p>
+              <p className="mt-1 text-[22px]">Vorgang</p>
             </div>
-          </div>
+          </section>
         </section>
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-headline-lg text-on-surface">
-              Lent (Verliehen)
-            </h3>
+            <h3 className="text-display-md text-on-surface">Lent</h3>
             <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
               View All
             </button>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-lg border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
+            <div className="rounded-3xl border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
               <div className="mb-3 flex items-center justify-between">
                 <p className="text-headline-lg text-primary tabular-nums">
                   $450.00
@@ -182,7 +170,7 @@ export default async function DashboardPage() {
                 Confirm Return
               </button>
             </div>
-            <div className="rounded-lg border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
+            <div className="rounded-3xl border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
               <div className="mb-3 flex items-center justify-between">
                 <p className="text-headline-lg text-primary tabular-nums">
                   $1,000.00
@@ -204,7 +192,7 @@ export default async function DashboardPage() {
             </div>
             <Link
               href="/new-transaction"
-              className="flex flex-col items-center justify-center rounded-lg border border-dashed border-outline-variant bg-surface-container-low p-6 text-outline hover:bg-surface-container hover:text-primary transition-colors group"
+              className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-outline hover:bg-surface-container hover:text-primary transition-colors group"
             >
               <span className="text-display-lg group-hover:scale-110 transition-transform">
                 +
@@ -216,15 +204,13 @@ export default async function DashboardPage() {
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-headline-lg text-on-surface">
-              Borrowed (Ausgeliehen)
-            </h3>
+            <h3 className="text-display-md text-on-surface">Borrowed</h3>
             <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
               View All
             </button>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
+            <div className="rounded-3xl border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
               <p className="text-headline-lg text-on-surface">
                 Drill & Tool Kit
               </p>
@@ -240,7 +226,7 @@ export default async function DashboardPage() {
                 </button>
               </div>
             </div>
-            <div className="rounded-lg border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
+            <div className="rounded-3xl border border-outline-variant bg-surface p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow">
               <p className="text-headline-lg text-on-surface tabular-nums">
                 $320.00
               </p>

@@ -1,11 +1,77 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "./tailwind.config.js";
 
 @layer base {
   body {
     @apply bg-background text-on-background font-sans antialiased;
+  }
+
+  /* Global Focus State for Keyboard Navigation */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background transition-shadow;
+  }
+}
+
+@layer components {
+  /* --- Buttons --- */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-on-primary px-6 py-3 hover:bg-primary-container;
+  }
+
+  .btn-secondary {
+    @apply border border-primary text-primary px-6 py-3 hover:bg-surface-container;
+  }
+
+  .btn-ghost {
+    @apply text-primary px-4 py-2 hover:bg-surface-container;
+  }
+
+  /* --- Input Fields --- */
+  .input-group {
+    @apply flex flex-col gap-2;
+  }
+
+  .input-label {
+    @apply text-label-sm text-on-surface;
+  }
+
+  .input-field {
+    @apply bg-sand text-on-surface rounded border border-transparent px-4 py-3 w-full focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all;
+  }
+
+  /* --- Cards --- */
+  .card {
+    @apply bg-surface border border-outline-variant rounded-lg p-6 hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow;
+  }
+
+  /* --- Lists --- */
+  .list-item {
+    @apply flex items-center py-4 border-b border-outline-variant/40 mx-4 last:border-b-0;
+  }
+
+  /* --- Chips & Tags --- */
+  .chip,
+  .chip-primary,
+  .chip-secondary,
+  .chip-error {
+    @apply rounded-full px-3 py-1 text-label-sm inline-flex items-center justify-center whitespace-nowrap;
+  }
+  .chip-primary {
+    @apply bg-primary-fixed text-on-primary-fixed;
+  }
+  .chip-secondary {
+    @apply bg-secondary-fixed text-on-secondary-fixed;
+  }
+  .chip-error {
+    @apply bg-error-container text-on-error-container;
   }
 }

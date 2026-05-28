@@ -27,7 +27,7 @@ export default function MainLayout({
         <DesktopNav />
       </aside>
 
-      <main className="min-w-0 flex-1 flex flex-col">
+      <main className="min-w-0 flex-1 bg-surface-container-low flex flex-col">
         {/* Desktop Header */}
         <header className="sticky top-0 z-10 hidden items-center justify-between border-b border-[#c0c8cb] bg-[#faf9f8] px-8 py-3 md:flex">
           <div className="w-full max-w-md rounded-full bg-[#f4f3f2] px-5 py-2 text-sm text-[#70787c]">

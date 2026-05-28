@@ -62,8 +62,13 @@ module.exports = {
       },
       fontSize: {
         "display-lg": [
-          "48px",
+          "32px",
           { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" },
+        ],
+
+        "display-md": [
+          "24px",
+          { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" },
         ],
         "headline-lg": [
           "32px",
