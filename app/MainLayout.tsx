@@ -1,6 +1,6 @@
-import { signOut } from "../auth";
 import Link from "next/link";
 import { DesktopNav, MobileNav } from "./Navigation";
+import { logoutUser } from "./actions/auth";
 
 export default function MainLayout({
   children,
@@ -35,12 +35,7 @@ export default function MainLayout({
           </div>
           <div className="ml-6 flex items-center gap-4 text-[#555d61]">
             <span className="text-lg">◌</span>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/login" });
-              }}
-            >
+            <form action={logoutUser}>
               <button className="rounded-full border border-[#c0c8cb] px-3 py-1 text-xs">
                 Log out
               </button>

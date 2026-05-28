@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "../../lib/db";
-import { signIn } from "../../auth";
+import { signIn, signOut } from "../../auth";
 import bcrypt from "bcryptjs";
 
 export async function registerUser(formData: FormData) {
@@ -48,4 +48,8 @@ export async function loginUser(formData: FormData) {
   } catch (error) {
     return { error: "Invalid credentials" };
   }
+}
+
+export async function logoutUser() {
+  await signOut({ redirectTo: "/login" });
 }

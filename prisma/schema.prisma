@@ -40,8 +40,14 @@ model Transaction {
   installmentPlan  String?
 
   // Item fields
+  itemName         String?
   itemCondition    String?
   itemImages       String[]
+
+  // Common details
+  lendingDate        DateTime?
+  expectedReturnDate DateTime?
+  notes              String?
 
   // Relations and Parties
   creatorId        String
