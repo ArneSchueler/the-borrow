@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String?
+  email        String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  
+  transactions Transaction[]
+}
+
+enum TransactionType {
+  MONEY
+  ITEM
+}
+
+enum TransactionStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  PENDING_RETURN
+  COMPLETED
+  OVERDUE
+}
+
+model Transaction {
+  id               String            @id @default(uuid())
+  type             TransactionType
+  status           TransactionStatus @default(PENDING_APPROVAL)
+
+  // Money fields
+  amount           Float?
+  interestRate     Float?
+  installmentPlan  String?
+
+  // Item fields
+  itemCondition    String?
+  itemImages       String[]
+
+  // Relations and Parties
+  creatorId        String
+  creator          User              @relation(fields: [creatorId], references: [id])
+  
+  partnerName      String?
+  partnerEmail     String?
+  
+  isCreatorLender  Boolean
+  
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
