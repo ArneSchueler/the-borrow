@@ -6,14 +6,15 @@ import {
   MobileTransactionCard,
   DesktopTransactionCard,
 } from "@/components/TransactionCard";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export default async function DashboardPage() {
   const session = await auth();
   const t = await getTranslations("Dashboard");
+  const locale = await getLocale();
 
   if (!session?.user?.email) {
-    redirect("/login");
+    return redirect({ href: "/login", locale });
   }
 
   const transactions = await getUserTransactions(session.user.email);

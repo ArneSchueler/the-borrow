@@ -214,20 +214,20 @@ export function NewTransactionDialog() {
               onClick={closeDialog}
               className="px-4 py-2 text-sm font-medium text-[#003644] hover:underline"
             >
-              {tBtn("cancel")}
+              Cancel
             </button>
             <button
               type="button"
               className="px-4 py-2 text-sm font-medium text-[#003644] hover:underline"
             >
-              {tBtn("saveAsDraft")}
+              Save as Draft
             </button>
             <button
               type="submit"
               className="inline-flex items-center gap-2 rounded-lg bg-[#003644] px-8 py-3 text-sm font-medium text-white transition-all hover:brightness-110"
             >
               <SendHorizonal className="h-4 w-4" />
-              {tBtn("createAgreement")}
+              Create Agreement
             </button>
           </div>
 

@@ -4,11 +4,14 @@ import MainLayout from "../MainLayout";
 import { getUserTransactions } from "@/lib/data";
 import { MobileTransactionCard, DesktopTransactionCard } from "@/components/TransactionCard";
 
+import { getLocale } from "next-intl/server";
+
 export default async function BorrowedPage() {
   const session = await auth();
+  const locale = await getLocale();
 
   if (!session?.user?.email) {
-    redirect("/login");
+    return redirect({ href: "/login", locale });
   }
 
   const transactions = await getUserTransactions(session.user.email);
