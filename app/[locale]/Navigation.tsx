@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/src/i18n/routing";
 import { LayoutDashboard, Upload, Download, Settings } from "lucide-react";
 
 const navItems = [

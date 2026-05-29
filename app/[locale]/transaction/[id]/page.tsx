@@ -1,5 +1,6 @@
-import { auth } from "../../../auth";
-import { redirect, notFound } from "next/navigation";
+import { auth } from "../../../../auth";
+import { notFound } from "next/navigation";
+import { redirect } from "@/src/i18n/routing";
 import MainLayout from "../../MainLayout";
 import { getUserTransactions } from "@/lib/data";
 import TransactionClient from "./TransactionClient";

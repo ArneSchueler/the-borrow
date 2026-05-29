@@ -1,0 +1,36 @@
+{
+  "Dashboard": {
+    "title": "Hallo, {name}",
+    "subtitle": "Hier ist deine Übersicht für heute.",
+    "lent": "Verliehen",
+    "borrowed": "Geliehen",
+    "transactions": "Vorgänge",
+    "currentlyLent": "Aktuell Verliehen",
+    "currentlyBorrowed": "Aktuell Geliehen",
+    "viewAll": "Alle ansehen",
+    "noLentItems": "Keine verliehenen Gegenstände.",
+    "noBorrowedItems": "Keine geliehenen Gegenstände.",
+    "newTransaction": "Neuer Vorgang"
+  },
+  "TransactionCard": {
+    "itemFallback": "Gegenstand",
+    "overdue": "Überfällig",
+    "due": "Fällig: {date}",
+    "noDate": "Kein Datum"
+  },
+  "Buttons": {
+    "confirmReturn": "Rückgabe bestätigen",
+    "remind": "Erinnern",
+    "payNow": "Jetzt bezahlen",
+    "returnItem": "Zurückgeben",
+    "extend": "Verlängern",
+    "requestExtension": "Verlängerung anfragen",
+    "markAsFinished": "als beendet markieren",
+    "confirmAgreement": "Vereinbarung bestätigen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "createAgreement": "Vereinbarung erstellen",
+    "saveAsDraft": "Als Entwurf speichern",
+    "greatThanks": "Alles klar, danke!"
+  }
+}

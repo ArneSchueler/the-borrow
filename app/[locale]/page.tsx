@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { ArrowRight, ShieldCheck, Repeat, BellRing } from "lucide-react";
 
 export default function LandingPage() {

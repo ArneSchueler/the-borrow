@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -318,7 +318,7 @@ export default function TransactionClient({
               onClick={() => setOpenModal(false)}
               className="mt-6 w-full rounded-lg bg-[#003644] py-3 font-semibold text-white hover:brightness-110 transition-all"
             >
-              Great, thanks!
+              {tBtn("greatThanks")}
             </button>
           </div>
         </div>
@@ -387,6 +387,14 @@ function Term({
       <div>
         <p className="text-xs text-[#40484b]">{label}</p>
         <p className="font-medium">{value}</p>
+      </div>
+    </div>
+  );
+}
+}
+  );
+}
+  <p className="font-medium">{value}</p>
       </div>
     </div>
   );

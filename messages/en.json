@@ -1,0 +1,36 @@
+{
+  "Dashboard": {
+    "title": "Hello, {name}",
+    "subtitle": "Here is your overview for today.",
+    "lent": "Lent",
+    "borrowed": "Borrowed",
+    "transactions": "Transactions",
+    "currentlyLent": "Currently Lent",
+    "currentlyBorrowed": "Currently Borrowed",
+    "viewAll": "View all",
+    "noLentItems": "No lent items.",
+    "noBorrowedItems": "No borrowed items.",
+    "newTransaction": "New Transaction"
+  },
+  "TransactionCard": {
+    "itemFallback": "Item",
+    "overdue": "Overdue",
+    "due": "Due: {date}",
+    "noDate": "No date"
+  },
+  "Buttons": {
+    "confirmReturn": "Confirm Return",
+    "remind": "Remind",
+    "payNow": "Pay Now",
+    "returnItem": "Return",
+    "extend": "Extend",
+    "requestExtension": "Request Extension",
+    "markAsFinished": "Mark as Finished",
+    "confirmAgreement": "Confirm Agreement",
+    "cancel": "Cancel",
+    "save": "Save",
+    "createAgreement": "Create Agreement",
+    "saveAsDraft": "Save as Draft",
+    "greatThanks": "Great, thanks!"
+  }
+}

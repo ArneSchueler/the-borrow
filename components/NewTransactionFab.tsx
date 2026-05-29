@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/src/i18n/routing";
 import { PlusCircle } from "lucide-react";
 import { NewTransactionDialog } from "./NewTransactionDialog";
 

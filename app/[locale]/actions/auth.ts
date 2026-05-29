@@ -1,7 +1,7 @@
 "use server";
 
-import prisma from "../../lib/db";
-import { signIn, signOut } from "../../auth";
+import prisma from "../../../lib/db";
+import { signIn, signOut } from "../../../auth";
 import bcrypt from "bcryptjs";
 
 export async function registerUser(formData: FormData) {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "@/src/i18n/routing";
 import { useRef, useEffect, useState } from "react";
 import {
   CalendarDays,
@@ -10,7 +11,7 @@ import {
   SendHorizonal,
   UserRoundPlus,
 } from "lucide-react";
-import { createTransaction } from "@/app/actions/transaction";
+import { createTransaction } from "@/app/[locale]/actions/transaction";
 
 export function NewTransactionDialog() {
   const searchParams = useSearchParams();
@@ -213,20 +214,20 @@ export function NewTransactionDialog() {
               onClick={closeDialog}
               className="px-4 py-2 text-sm font-medium text-[#003644] hover:underline"
             >
-              Cancel
+              {tBtn("cancel")}
             </button>
             <button
               type="button"
               className="px-4 py-2 text-sm font-medium text-[#003644] hover:underline"
             >
-              Save as Draft
+              {tBtn("saveAsDraft")}
             </button>
             <button
               type="submit"
               className="inline-flex items-center gap-2 rounded-lg bg-[#003644] px-8 py-3 text-sm font-medium text-white transition-all hover:brightness-110"
             >
               <SendHorizonal className="h-4 w-4" />
-              Create Agreement
+              {tBtn("createAgreement")}
             </button>
           </div>
 
