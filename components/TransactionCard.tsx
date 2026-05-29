@@ -56,7 +56,7 @@ export function DesktopTransactionCard({ t }: { t: EnrichedTransaction }) {
   const isOverdue = t.expectedReturnDate && t.expectedReturnDate < new Date();
 
   return (
-    <div className="rounded-2xl border border-[#d8dcdf] bg-white p-4 flex flex-col justify-between">
+    <div className="flex flex-col justify-between rounded-2xl border border-[#d8dcdf] bg-white p-4 transition-all duration-300 hover:-translate-y-[2px] hover:border-[#134e5e]">
       <div>
         <div className="mb-3 flex items-center justify-between">
           <p className="font-title-md text-title-md text-primary">

@@ -93,7 +93,8 @@ export default async function DashboardPage() {
       </div>
 
       {/* desktop */}
-      <div className="hidden md:block mx-auto w-full max-w-6xl px-container-desktop pb-10 pt-8 space-y-section-gap">
+      {/* <div className="hidden md:block mx-auto w-full max-w-6xl px-container-desktop pb-10 pt-8 space-y-section-gap"> */}
+      <div className="px-container-padding-desktop py-base max-w-7xl mx-auto w-full flex flex-col gap-section-gap md:px-8 lg:px-12 pt-8 pb-10">
         <section className="flex items-start justify-between">
           <div>
             <h1 className="text-display-lg text-primary">
@@ -123,7 +124,7 @@ export default async function DashboardPage() {
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-display-md text-on-surface">
+            <h3 className="font-title-md text-title-md text-on-surface">
               Aktuell Verliehen
             </h3>
             <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
@@ -149,7 +150,7 @@ export default async function DashboardPage() {
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-display-md text-on-surface">
+            <h3 className="font-title-md text-title-md text-on-surface">
               Aktuell Geliehen
             </h3>
             <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
