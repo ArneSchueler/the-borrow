@@ -4,12 +4,15 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { $Enums } from "@prisma/client";
 import { redirect } from "@/src/i18n/routing";
+import { getLocale } from "next-intl/server";
 
 export async function createTransaction(formData: FormData) {
   const session = await auth();
   if (!session?.user?.email) {
     throw new Error("Unauthorized");
   }
+
+  const locale = await getLocale();
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
@@ -64,5 +67,5 @@ export async function createTransaction(formData: FormData) {
     },
   });
 
-  redirect("/dashboard");
+  redirect({ href: "/dashboard", locale });
 }
