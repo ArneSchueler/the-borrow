@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
-import { TransactionType } from "@prisma/client";
+import { $Enums } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export async function createTransaction(formData: FormData) {
@@ -21,7 +21,9 @@ export async function createTransaction(formData: FormData) {
 
   const typeValue = formData.get("type") as string;
   const type =
-    typeValue === "money" ? TransactionType.MONEY : TransactionType.ITEM;
+    typeValue === "money"
+      ? $Enums.TransactionType.MONEY
+      : $Enums.TransactionType.ITEM;
 
   // common
   const partnerEmail = formData.get("partnerEmail") as string;
