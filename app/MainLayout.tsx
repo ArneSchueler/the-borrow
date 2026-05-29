@@ -1,11 +1,13 @@
-import Link from "next/link";
 import { DesktopNav, MobileNav } from "./Navigation";
 import { logoutUser } from "./actions/auth";
+import { NewTransactionFab } from "@/components/NewTransactionFab";
 
 export default function MainLayout({
   children,
+  showFab,
 }: {
   children: React.ReactNode;
+  showFab?: boolean;
 }) {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#faf9f8] text-[#1a1c1c] md:flex">
@@ -46,13 +48,8 @@ export default function MainLayout({
         <div className="flex-1 pb-24 md:pb-0">{children}</div>
       </main>
 
-      {/* Mobile Floating Button */}
-      <Link
-        href="/new-transaction"
-        className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#004b5f] text-3xl text-white shadow-lg md:hidden"
-      >
-        +
-      </Link>
+      {/* Floating Action Buttons */}
+      {showFab && <NewTransactionFab />}
 
       {/* Mobile Bottom Nav */}
       <MobileNav />

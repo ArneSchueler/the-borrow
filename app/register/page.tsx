@@ -16,15 +16,15 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
     setSuccess("");
-    
+
     const result = await registerUser(formData);
-    
+
     if (result?.error) {
       setError(result.error);
     } else if (result?.success) {
       setSuccess(result.success);
     }
-    
+
     setLoading(false);
   }
 
@@ -33,8 +33,12 @@ export default function RegisterPage() {
       <header className="relative flex h-48 items-center justify-center overflow-hidden bg-[#003644] px-6 lg:hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.16),transparent_45%),radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.12),transparent_50%)]" />
         <div className="relative z-10 text-center">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-[#b6ebfe]">TheBorrow</p>
-          <h1 className="mt-3 text-3xl font-semibold text-[#b6ebfe]">Konto erstellen</h1>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-[#b6ebfe]">
+            TheBorrow
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold text-[#b6ebfe]">
+            Konto erstellen
+          </h1>
         </div>
       </header>
 
@@ -45,17 +49,15 @@ export default function RegisterPage() {
               <div className="h-full w-full bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[28px_28px]" />
             </div>
             <div className="relative z-10">
-              <p className="text-lg font-black tracking-tight text-white">TheBorrow</p>
+              <p className="text-lg font-black tracking-tight text-white">
+                TheBorrow
+              </p>
               <h2 className="mt-8 max-w-sm text-5xl font-bold leading-tight text-white">
                 Build trusted borrowing circles.
               </h2>
               <p className="mt-6 max-w-xs text-lg text-[#8abed1]">
-                Create your account and start tracking loans transparently across your community.
-              </p>
-            </div>
-            <div className="relative z-10 rounded-lg border border-white/10 bg-[#134e5e] p-6">
-              <p className="text-[#b6ebfe]">
-                "Transparent lending begins with one clear account."
+                Create your account and start tracking loans transparently
+                across your community.
               </p>
             </div>
           </section>
@@ -78,13 +80,19 @@ export default function RegisterPage() {
               </div>
 
               <div className="mb-10 text-center">
-                <h2 className="text-3xl font-semibold text-[#1a1c1c]">Create Account</h2>
-                <p className="mt-2 text-[#40484b]">Set up your secure burrow profile.</p>
+                <h2 className="text-3xl font-semibold text-[#1a1c1c]">
+                  Create Account
+                </h2>
+                <p className="mt-2 text-[#40484b]">
+                  Set up your secure burrow profile.
+                </p>
               </div>
 
               <form action={onSubmit} className="space-y-6">
                 {error && <div className="text-sm text-red-600">{error}</div>}
-                {success && <div className="text-sm text-emerald-700">{success}</div>}
+                {success && (
+                  <div className="text-sm text-emerald-700">{success}</div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="name" className="px-1 text-sm text-[#40484b]">
@@ -100,7 +108,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="px-1 text-sm text-[#40484b]">
+                  <Label
+                    htmlFor="email"
+                    className="px-1 text-sm text-[#40484b]"
+                  >
                     E-Mail Adresse
                   </Label>
                   <Input
@@ -114,7 +125,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="px-1 text-sm text-[#40484b]">
+                  <Label
+                    htmlFor="password"
+                    className="px-1 text-sm text-[#40484b]"
+                  >
                     Passwort wahlen
                   </Label>
                   <Input
@@ -150,7 +164,10 @@ export default function RegisterPage() {
 
               <div className="mt-10 border-t border-[#c0c8cb] pt-8 text-center text-[#40484b]">
                 Already registered?{" "}
-                <Link href="/login" className="font-semibold text-[#003644] hover:underline">
+                <Link
+                  href="/login"
+                  className="font-semibold text-[#003644] hover:underline"
+                >
                   Log in
                 </Link>
               </div>
@@ -162,9 +179,15 @@ export default function RegisterPage() {
       <footer className="hidden px-10 pb-8 lg:block">
         <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between text-sm text-[#70787c]">
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[#003644]">Privacy Policy</a>
-            <a href="#" className="hover:text-[#003644]">Terms of Service</a>
-            <a href="#" className="hover:text-[#003644]">Support</a>
+            <a href="#" className="hover:text-[#003644]">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-[#003644]">
+              Terms of Service
+            </a>
+            <a href="#" className="hover:text-[#003644]">
+              Support
+            </a>
           </div>
           <p>© 2024 TheBorrow Financial</p>
         </div>

@@ -16,7 +16,7 @@ export default async function LentPage() {
   const lentTransactions = transactions.filter((t) => t.isLentByMe);
 
   return (
-    <MainLayout>
+    <MainLayout showFab>
       {/* Mobile Content */}
       <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
         <section>
