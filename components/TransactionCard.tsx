@@ -1,12 +1,16 @@
 import { EnrichedTransaction } from "@/lib/data";
 import { format } from "date-fns";
 import { User, CalendarDays, Euro, Package } from "lucide-react";
+import Link from "next/link";
 
 export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
   const isOverdue = t.expectedReturnDate && t.expectedReturnDate < new Date();
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-[#d9dddf] bg-white p-3">
+    <Link
+      href={`/transaction/${t.id}`}
+      className="flex items-center gap-3 rounded-xl border border-[#d9dddf] bg-white p-3 transition-colors hover:bg-gray-50 active:scale-[0.99]"
+    >
       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#f1f3f4] text-[#5b6468]">
         {t.type === "MONEY" ? (
           <Euro className="h-6 w-6" />
@@ -48,7 +52,7 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -56,7 +60,10 @@ export function DesktopTransactionCard({ t }: { t: EnrichedTransaction }) {
   const isOverdue = t.expectedReturnDate && t.expectedReturnDate < new Date();
 
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-[#d8dcdf] bg-white p-4 transition-all duration-300 hover:-translate-y-[2px] hover:border-[#134e5e]">
+    <Link
+      href={`/transaction/${t.id}`}
+      className="group flex flex-col justify-between rounded-2xl border border-[#d8dcdf] bg-white p-4 transition-all duration-300 hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md"
+    >
       <div>
         <div className="mb-3 flex items-center justify-between">
           <p className="font-title-md text-title-md text-primary">
@@ -96,9 +103,9 @@ export function DesktopTransactionCard({ t }: { t: EnrichedTransaction }) {
           )}
         </div>
       </div>
-      <button className="mt-4 w-full rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63]">
+      <div className="mt-4 w-full rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors group-hover:bg-[#0d4f63] group-hover:text-white">
         Vorgang ansehen
-      </button>
-    </div>
+      </div>
+    </Link>
   );
 }
