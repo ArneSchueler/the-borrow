@@ -107,7 +107,7 @@ export default function TransactionClient({
               </span>
             </div>
             <div className="rounded-lg bg-[#f4f3f2] p-3 text-sm italic">
-              "{isMoney ? "Geliehener Betrag." : "Wie vereinbart übergeben."}"
+              &quot;{isMoney ? "Geliehener Betrag." : "Wie vereinbart übergeben."}&quot;
             </div>
           </div>
         </StackCard>
@@ -318,7 +318,7 @@ export default function TransactionClient({
               onClick={() => setOpenModal(false)}
               className="mt-6 w-full rounded-lg bg-[#003644] py-3 font-semibold text-white hover:brightness-110 transition-all"
             >
-              {tBtn("greatThanks")}
+              Great, thanks!
             </button>
           </div>
         </div>
@@ -387,14 +387,6 @@ function Term({
       <div>
         <p className="text-xs text-[#40484b]">{label}</p>
         <p className="font-medium">{value}</p>
-      </div>
-    </div>
-  );
-}
-}
-  );
-}
-  <p className="font-medium">{value}</p>
       </div>
     </div>
   );
