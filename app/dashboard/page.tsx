@@ -24,10 +24,10 @@ export default async function DashboardPage() {
       {/* mobile */}
       <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
         <section>
-          <h1 className="text-[40px] font-bold leading-none text-[#0d4f63]">
+          <h1 className="text-display-lg text-primary">
             Hallo, {session.user.name || "Julian"}
           </h1>
-          <p className="mt-2 text-[29px] text-[#3f474b]">
+          <p className="mt-2 text-body-lg text-on-surface-variant">
             Hier ist deine Übersicht für heute.
           </p>
         </section>
@@ -51,10 +51,10 @@ export default async function DashboardPage() {
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-[42px] font-semibold text-[#1f2325]">
+            <h2 className="font-title-md text-title-md text-on-surface">
               Aktuell Verliehen
             </h2>
-            <button className="text-[20px] font-medium text-[#0f4f64]">
+            <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
               Alle ansehen
             </button>
           </div>
@@ -72,10 +72,10 @@ export default async function DashboardPage() {
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-[42px] font-semibold text-[#1f2325]">
+            <h2 className="font-title-md text-title-md text-on-surface">
               Aktuell Geliehen
             </h2>
-            <button className="text-[20px] font-medium text-[#0f4f64]">
+            <button className="text-body-md font-medium text-primary hover:text-primary-container transition-colors">
               Alle ansehen
             </button>
           </div>
@@ -93,8 +93,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* desktop */}
-      {/* <div className="hidden md:block mx-auto w-full max-w-6xl px-container-desktop pb-10 pt-8 space-y-section-gap"> */}
-      <div className="px-container-padding-desktop py-base max-w-7xl mx-auto w-full flex flex-col gap-section-gap md:px-8 lg:px-12 pt-8 pb-10">
+      <div className="hidden md:flex px-container-padding-desktop py-base max-w-7xl mx-auto w-full flex-col gap-section-gap md:px-8 lg:px-12 pt-8 pb-10">
         <section className="flex items-start justify-between">
           <div>
             <h1 className="text-display-lg text-primary">
