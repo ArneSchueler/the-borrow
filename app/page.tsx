@@ -4,9 +4,16 @@ import { ArrowRight, ShieldCheck, Repeat, BellRing } from "lucide-react";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#faf9f8] flex flex-col text-[#1a1c1c]">
-      {/* Header */}
+      {/* Header with Logo */}
       <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-[#c0c8cb] bg-[#faf9f8]/90 backdrop-blur-md">
-        <div className="text-2xl font-black text-[#003644]">TheBorrow</div>
+        <Link href="/" className="flex -gap-2 items-center">
+          <img
+            src="/theBorrow-logo.png"
+            alt="TheBorrow Logo"
+            className="h-10 md:h-11"
+          />
+          <span className="text-title-md text-primary">TheBorrow</span>
+        </Link>
         <div className="flex items-center gap-2 md:gap-4">
           <Link
             href="/login"
