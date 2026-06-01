@@ -1,6 +1,5 @@
-import { auth } from "../../../auth";
+import { auth } from "../../../../auth";
 import { redirect, Link } from "@/src/i18n/routing";
-import MainLayout from "../MainLayout";
 import { getUserTransactions } from "@/lib/data";
 import {
   MobileTransactionCard,
@@ -22,7 +21,7 @@ export default async function DashboardPage() {
   const borrowedTransactions = transactions.filter((tx) => !tx.isLentByMe);
 
   return (
-    <MainLayout showFab>
+    <>
       {/* mobile */}
       <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
         <section>
@@ -171,6 +170,6 @@ export default async function DashboardPage() {
           </div>
         </section>
       </div>
-    </MainLayout>
+    </>
   );
 }

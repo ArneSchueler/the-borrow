@@ -1,6 +1,5 @@
-import { auth } from "../../../auth";
+import { auth } from "../../../../auth";
 import { redirect, Link } from "@/src/i18n/routing";
-import MainLayout from "../MainLayout";
 import { getUserTransactions } from "@/lib/data";
 import { MobileTransactionCard, DesktopTransactionCard } from "@/components/TransactionCard";
 
@@ -18,7 +17,7 @@ export default async function LentPage() {
   const lentTransactions = transactions.filter((t) => t.isLentByMe);
 
   return (
-    <MainLayout showFab>
+    <>
       {/* Mobile Content */}
       <div className="mx-auto max-w-md space-y-6 px-4 pt-5 md:hidden">
         <section>
@@ -69,6 +68,6 @@ export default async function LentPage() {
           </Link>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }

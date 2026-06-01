@@ -11,14 +11,13 @@ import {
   Shield,
   UserRoundPlus,
 } from "lucide-react";
-import { createTransaction } from "../actions/transaction";
-import MainLayout from "../MainLayout";
+import { createTransaction } from "../../actions/transaction";
 
 export default function NewTransactionPage() {
   const [type, setType] = useState<"money" | "object">("money");
 
   return (
-    <MainLayout>
+    <>
       <div className="min-h-screen bg-[#faf9f8] text-[#1a1c1c]">
         <header className="sticky top-0 z-40 flex items-center border-b border-[#c0c8cb] bg-[#faf9f8] px-5 py-4 md:hidden">
           <button
@@ -302,7 +301,7 @@ export default function NewTransactionPage() {
           <PlusCircle className="h-7 w-7" />
         </button>
       </div>
-    </MainLayout>
+    </>
   );
 }
 
