@@ -5,15 +5,31 @@ import { MobileTransactionCard, DesktopTransactionCard } from "@/components/Tran
 
 import { getLocale } from "next-intl/server";
 
-export default async function LentPage() {
+type PageProps = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function LentPage({ searchParams }: PageProps) {
   const session = await auth();
   const locale = await getLocale();
+  const resolvedSearchParams = await searchParams;
+  const q = resolvedSearchParams.q;
 
   if (!session?.user?.email) {
     return redirect({ href: "/login", locale });
   }
 
-  const transactions = await getUserTransactions(session.user.email);
+  let transactions = await getUserTransactions(session.user.email);
+
+  if (q) {
+    const searchLower = q.toLowerCase();
+    transactions = transactions.filter((tx) =>
+      (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
+      (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
+      (tx.notes && tx.notes.toLowerCase().includes(searchLower))
+    );
+  }
+
   const lentTransactions = transactions.filter((t) => t.isLentByMe);
 
   return (

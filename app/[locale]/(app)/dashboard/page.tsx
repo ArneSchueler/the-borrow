@@ -7,16 +7,32 @@ import {
 } from "@/components/TransactionCard";
 import { getTranslations, getLocale } from "next-intl/server";
 
-export default async function DashboardPage() {
+type PageProps = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function DashboardPage({ searchParams }: PageProps) {
   const session = await auth();
   const t = await getTranslations("Dashboard");
   const locale = await getLocale();
+  const resolvedSearchParams = await searchParams;
+  const q = resolvedSearchParams.q;
 
   if (!session?.user?.email) {
     return redirect({ href: "/login", locale });
   }
 
-  const transactions = await getUserTransactions(session.user.email);
+  let transactions = await getUserTransactions(session.user.email);
+
+  if (q) {
+    const searchLower = q.toLowerCase();
+    transactions = transactions.filter((tx) =>
+      (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
+      (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
+      (tx.notes && tx.notes.toLowerCase().includes(searchLower))
+    );
+  }
+
   const lentTransactions = transactions.filter((tx) => tx.isLentByMe);
   const borrowedTransactions = transactions.filter((tx) => !tx.isLentByMe);
 

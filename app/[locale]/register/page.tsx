@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/src/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function RegisterPage() {
+  const t = useTranslations("Auth");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,7 +39,7 @@ export default function RegisterPage() {
             TheBorrow
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-[#b6ebfe]">
-            Konto erstellen
+            {t("registerTitle")}
           </h1>
         </div>
       </header>
@@ -53,11 +55,10 @@ export default function RegisterPage() {
                 TheBorrow
               </p>
               <h2 className="mt-8 max-w-sm text-5xl font-bold leading-tight text-white">
-                Build trusted borrowing circles.
+                {t("registerHeroTitle")}
               </h2>
               <p className="mt-6 max-w-xs text-lg text-[#8abed1]">
-                Create your account and start tracking loans transparently
-                across your community.
+                {t("registerHeroSubtitle")}
               </p>
             </div>
           </section>
@@ -72,19 +73,19 @@ export default function RegisterPage() {
                   href="/login"
                   className="flex-1 py-3 text-center text-sm font-medium text-[#70787c] transition-colors hover:text-[#003644]"
                 >
-                  Anmelden
+                  {t("loginTab")}
                 </Link>
                 <div className="flex-1 border-b-2 border-[#003644] py-3 text-center text-sm font-semibold text-[#003644]">
-                  Registrieren
+                  {t("registerTab")}
                 </div>
               </div>
 
               <div className="mb-10 text-center">
                 <h2 className="text-3xl font-semibold text-[#1a1c1c]">
-                  Create Account
+                  {t("registerHeading")}
                 </h2>
                 <p className="mt-2 text-[#40484b]">
-                  Set up your secure burrow profile.
+                  {t("registerSubheading")}
                 </p>
               </div>
 
@@ -96,12 +97,12 @@ export default function RegisterPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="name" className="px-1 text-sm text-[#40484b]">
-                    Vollstandiger Name
+                    {t("nameLabel")}
                   </Label>
                   <Input
                     id="name"
                     name="name"
-                    placeholder="Max Mustermann"
+                    placeholder={t("namePlaceholder")}
                     className="h-12 border-0 bg-[#f5f2ed] text-base focus-visible:ring-2 focus-visible:ring-[#003644]"
                     required
                   />
@@ -112,13 +113,13 @@ export default function RegisterPage() {
                     htmlFor="email"
                     className="px-1 text-sm text-[#40484b]"
                   >
-                    E-Mail Adresse
+                    {t("emailLabel")}
                   </Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="name@beispiel.de"
+                    placeholder={t("emailPlaceholder")}
                     className="h-12 border-0 bg-[#f5f2ed] text-base focus-visible:ring-2 focus-visible:ring-[#003644]"
                     required
                   />
@@ -129,26 +130,26 @@ export default function RegisterPage() {
                     htmlFor="password"
                     className="px-1 text-sm text-[#40484b]"
                   >
-                    Passwort wahlen
+                    {t("passwordChooseLabel")}
                   </Label>
                   <Input
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Mind. 8 Zeichen"
+                    placeholder={t("passwordRegisterPlaceholder")}
                     className="h-12 border-0 bg-[#f5f2ed] text-base focus-visible:ring-2 focus-visible:ring-[#003644]"
                     required
                   />
                 </div>
 
                 <p className="px-1 text-sm text-[#40484b]">
-                  Mit der Registrierung akzeptieren Sie unsere{" "}
+                  {t("termsText1")}
                   <a href="#" className="text-[#003644] underline">
-                    AGB
-                  </a>{" "}
-                  und{" "}
+                    {t("termsText2")}
+                  </a>
+                  {t("termsText3")}
                   <a href="#" className="text-[#003644] underline">
-                    Datenschutzbestimmungen
+                    {t("termsText4")}
                   </a>
                   .
                 </p>
@@ -158,17 +159,17 @@ export default function RegisterPage() {
                   className="h-12 w-full bg-[#003644] text-white hover:brightness-110"
                   disabled={loading}
                 >
-                  {loading ? "Registering..." : "Konto erstellen"}
+                  {loading ? t("registering") : t("registerButton")}
                 </Button>
               </form>
 
               <div className="mt-10 border-t border-[#c0c8cb] pt-8 text-center text-[#40484b]">
-                Already registered?{" "}
+                {t("alreadyRegistered")}{" "}
                 <Link
                   href="/login"
                   className="font-semibold text-[#003644] hover:underline"
                 >
-                  Log in
+                  {t("logInLink")}
                 </Link>
               </div>
             </div>
@@ -180,16 +181,16 @@ export default function RegisterPage() {
         <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between text-sm text-[#70787c]">
           <div className="flex gap-6">
             <a href="#" className="hover:text-[#003644]">
-              Privacy Policy
+              {t("privacyPolicy")}
             </a>
             <a href="#" className="hover:text-[#003644]">
-              Terms of Service
+              {t("termsOfService")}
             </a>
             <a href="#" className="hover:text-[#003644]">
-              Support
+              {t("support")}
             </a>
           </div>
-          <p>© 2024 TheBorrow Financial</p>
+          <p>{t("copyright")}</p>
         </div>
       </footer>
     </div>

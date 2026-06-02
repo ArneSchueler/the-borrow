@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/src/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function LoginPage() {
+  const t = useTranslations("Auth");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,7 +48,7 @@ export default function LoginPage() {
             TheBorrow
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-[#b6ebfe]">
-            Willkommen!
+            {t("loginTitle")}
           </h1>
         </div>
       </header>
@@ -62,11 +64,10 @@ export default function LoginPage() {
                 TheBorrow
               </p>
               <h2 className="mt-8 max-w-sm text-5xl font-bold leading-tight text-white">
-                Financial clarity for the modern burrow.
+                {t("loginHeroTitle")}
               </h2>
               <p className="mt-6 max-w-xs text-lg text-[#8abed1]">
-                Securely manage your lending and borrowing with communal trust
-                and clear organization.
+                {t("loginHeroSubtitle")}
               </p>
             </div>
           </section>
@@ -78,22 +79,22 @@ export default function LoginPage() {
             <div className="mx-auto w-full max-w-[400px]">
               <div className="mb-8 flex w-full border-b border-[#c0c8cb]">
                 <div className="flex-1 border-b-2 border-[#003644] py-3 text-center text-sm font-semibold text-[#003644]">
-                  Anmelden
+                  {t("loginTab")}
                 </div>
                 <Link
                   href="/register"
                   className="flex-1 py-3 text-center text-sm font-medium text-[#70787c] transition-colors hover:text-[#003644]"
                 >
-                  Registrieren
+                  {t("registerTab")}
                 </Link>
               </div>
 
               <div className="mb-10 text-left">
                 <h2 className="text-[44px] font-semibold leading-tight text-[#1a1c1c]">
-                  Welcome Back
+                  {t("loginHeading")}
                 </h2>
                 <p className="mt-2 text-[22px] text-[#40484b]">
-                  Log in to your secure burrow dashboard.
+                  {t("loginSubheading")}
                 </p>
               </div>
 
@@ -108,7 +109,7 @@ export default function LoginPage() {
                     htmlFor="email"
                     className="px-1 text-sm text-[#40484b]"
                   >
-                    E-Mail Adresse
+                    {t("emailLabel")}
                   </Label>
                   <div className="relative">
                     <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#70787c]">
@@ -118,7 +119,7 @@ export default function LoginPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="name@beispiel.de"
+                      placeholder={t("emailPlaceholder")}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="h-12 border-0 bg-[#f5f2ed] pl-11 text-base focus-visible:ring-2 focus-visible:ring-[#003644]"
@@ -132,7 +133,7 @@ export default function LoginPage() {
                     htmlFor="password"
                     className="px-1 text-sm text-[#40484b]"
                   >
-                    Passwort
+                    {t("passwordLabel")}
                   </Label>
                   <div className="relative">
                     <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#70787c]">
@@ -144,7 +145,7 @@ export default function LoginPage() {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
+                      placeholder={t("passwordPlaceholder")}
                       className="h-12 border-0 bg-[#f5f2ed] pl-11 text-base focus-visible:ring-2 focus-visible:ring-[#003644]"
                       required
                     />
@@ -157,7 +158,7 @@ export default function LoginPage() {
                     className="h-12 w-full bg-[#003f4f] text-white hover:brightness-110"
                     disabled={loading}
                   >
-                    {loading ? "Logging in..." : "Jetzt Anmelden"}
+                    {loading ? t("loggingIn") : t("loginButton")}
                   </Button>
                   <Button
                     type="button"
@@ -165,18 +166,18 @@ export default function LoginPage() {
                     className="h-12 w-full border-[#003644] text-[#003644] hover:bg-[#003644] hover:text-white"
                     onClick={fillTestCredentials}
                   >
-                    Use test credentials
+                    {t("testCredentialsButton")}
                   </Button>
                 </div>
               </form>
 
               <div className="mt-10 border-t border-[#c0c8cb] pt-8 text-center text-[#40484b]">
-                New to the burrow?{" "}
+                {t("newToBurrow")}{" "}
                 <Link
                   href="/register"
                   className="font-semibold text-[#003644] hover:underline"
                 >
-                  Create an Account
+                  {t("createAccountLink")}
                 </Link>
               </div>
             </div>
@@ -188,16 +189,16 @@ export default function LoginPage() {
         <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between text-sm text-[#70787c]">
           <div className="flex gap-6">
             <a href="#" className="hover:text-[#003644]">
-              Privacy Policy
+              {t("privacyPolicy")}
             </a>
             <a href="#" className="hover:text-[#003644]">
-              Terms of Service
+              {t("termsOfService")}
             </a>
             <a href="#" className="hover:text-[#003644]">
-              Support
+              {t("support")}
             </a>
           </div>
-          <p>© 2024 TheBorrow Financial</p>
+          <p>{t("copyright")}</p>
         </div>
       </footer>
     </div>
