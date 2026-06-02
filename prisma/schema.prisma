@@ -58,6 +58,9 @@ model Transaction {
   
   isCreatorLender  Boolean
   
+  creatorConfirmed Boolean           @default(false)
+  partnerConfirmed Boolean           @default(false)
+  
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 }

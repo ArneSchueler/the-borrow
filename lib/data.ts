@@ -4,6 +4,7 @@ import { Transaction } from "@prisma/client";
 export type EnrichedTransaction = Transaction & {
   isLentByMe: boolean;
   partyName: string;
+  isCreator: boolean;
 };
 
 export async function getUserTransactions(userEmail: string): Promise<EnrichedTransaction[]> {
@@ -31,8 +32,9 @@ export async function getUserTransactions(userEmail: string): Promise<EnrichedTr
   return transactions.map((t) => {
     let isLentByMe = false;
     let partyName = "";
+    const isCreator = t.creatorId === user.id;
 
-    if (t.creatorId === user.id) {
+    if (isCreator) {
       isLentByMe = t.isCreatorLender;
       partyName = t.partnerEmail || "Unbekannt";
     } else {
@@ -44,6 +46,7 @@ export async function getUserTransactions(userEmail: string): Promise<EnrichedTr
       ...t,
       isLentByMe,
       partyName,
+      isCreator,
     };
   });
 }

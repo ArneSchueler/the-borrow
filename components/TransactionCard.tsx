@@ -1,6 +1,6 @@
 import { EnrichedTransaction } from "@/lib/data";
 import { format } from "date-fns";
-import { User, CalendarDays, Euro, Package } from "lucide-react";
+import { User, CalendarDays, Euro, Package, Clock } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
 
@@ -8,6 +8,8 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
   const isOverdue = t.expectedReturnDate && t.expectedReturnDate < new Date();
   const tCard = useTranslations("TransactionCard");
   const tBtn = useTranslations("Buttons");
+  
+  const isFullyConfirmed = t.creatorConfirmed && t.partnerConfirmed;
 
   return (
     <div className="flex h-full flex-col justify-between rounded-2xl border border-[#d8dcdf] bg-white p-4 transition-all duration-300 hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md">
@@ -49,29 +51,38 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
             <p className="font-body-md">{tCard("noDate")}</p>
           )}
         </div>
+        
+        {!isFullyConfirmed && (
+          <div className="mt-2 flex items-center gap-1.5 text-amber-600 bg-amber-50 px-2 py-1 rounded-md inline-flex w-fit">
+            <Clock className="h-3 w-3" />
+            <p className="text-xs font-medium">{tCard("awaitingConfirmation")}</p>
+          </div>
+        )}
       </Link>
       
-      <div className="mt-4 flex gap-2">
-        {t.isLentByMe ? (
-          <>
-            <button className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-center text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c]">
-              {tBtn("confirmReturn")}
-            </button>
-            <button className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]">
-              {tBtn("remind")}
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-center text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c]">
-              {t.type === "MONEY" ? tBtn("payNow") : tBtn("returnItem")}
-            </button>
-            <button className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]">
-              {tBtn("extend")}
-            </button>
-          </>
-        )}
-      </div>
+      {isFullyConfirmed && (
+        <div className="mt-4 flex gap-2">
+          {t.isLentByMe ? (
+            <>
+              <button className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-center text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c]">
+                {tBtn("confirmReturn")}
+              </button>
+              <button className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]">
+                {tBtn("remind")}
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-center text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c]">
+                {t.type === "MONEY" ? tBtn("payNow") : tBtn("returnItem")}
+              </button>
+              <button className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]">
+                {tBtn("extend")}
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

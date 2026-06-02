@@ -17,7 +17,8 @@
     "itemFallback": "Item",
     "overdue": "Overdue",
     "due": "Due: {date}",
-    "noDate": "No date"
+    "noDate": "No date",
+    "awaitingConfirmation": "Awaiting Confirmation"
   },
   "Buttons": {
     "confirmReturn": "Confirm Return",

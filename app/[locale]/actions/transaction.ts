@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { $Enums } from "@prisma/client";
 import { redirect } from "@/src/i18n/routing";
 import { getLocale } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 
 export async function createTransaction(formData: FormData) {
   const session = await auth();
@@ -64,8 +65,65 @@ export async function createTransaction(formData: FormData) {
       installmentPlan: installmentPlan || null,
       itemName: itemName || null,
       itemCondition: itemCondition || null,
+      creatorConfirmed: true,
     },
   });
 
   redirect({ href: "/dashboard", locale });
+}
+
+export async function confirmTransaction(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const transaction = await prisma.transaction.findUnique({
+    where: { id: transactionId },
+  });
+
+  if (!transaction) {
+    throw new Error("Transaction not found");
+  }
+
+  const isCreator = transaction.creatorId === user.id;
+  const isPartner = transaction.partnerEmail === user.email;
+
+  if (!isCreator && !isPartner) {
+    throw new Error("Unauthorized to confirm this transaction");
+  }
+
+  if (isCreator) {
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: { creatorConfirmed: true },
+    });
+  } else if (isPartner) {
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: { partnerConfirmed: true },
+    });
+  }
+
+  // If both confirmed, update status to ACTIVE
+  const updatedTransaction = await prisma.transaction.findUnique({
+    where: { id: transactionId },
+  });
+
+  if (updatedTransaction?.creatorConfirmed && updatedTransaction?.partnerConfirmed) {
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: { status: "ACTIVE" },
+    });
+  }
+
+  revalidatePath(`/`);
 }

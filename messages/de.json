@@ -17,7 +17,8 @@
     "itemFallback": "Gegenstand",
     "overdue": "Überfällig",
     "due": "Fällig: {date}",
-    "noDate": "Kein Datum"
+    "noDate": "Kein Datum",
+    "awaitingConfirmation": "Wartet auf Bestätigung"
   },
   "Buttons": {
     "confirmReturn": "Rückgabe bestätigen",

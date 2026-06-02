@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Gavel,
   Group,
-  HelpCircle,
   Info,
   ShieldCheck,
   Euro,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { EnrichedTransaction } from "@/lib/data";
+import { confirmTransaction } from "@/app/[locale]/actions/transaction";
 
 export default function TransactionClient({
   transaction,
@@ -27,16 +27,38 @@ export default function TransactionClient({
 }) {
   const [agreed, setAgreed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isMoney = transaction.type === "MONEY";
 
-  // Determine who is who based on whether the current user is the lender
   const lenderName = transaction.isLentByMe
     ? `${userName} (Du)`
     : transaction.partyName;
   const borrowerName = transaction.isLentByMe
     ? transaction.partyName
     : `${userName} (Du)`;
+
+  const hasConfirmed = transaction.isCreator
+    ? transaction.creatorConfirmed
+    : transaction.partnerConfirmed;
+    
+  const otherPartyConfirmed = transaction.isCreator
+    ? transaction.partnerConfirmed
+    : transaction.creatorConfirmed;
+
+  const isFullyConfirmed = transaction.creatorConfirmed && transaction.partnerConfirmed;
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    try {
+      await confirmTransaction(transaction.id);
+      setOpenModal(true);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -50,7 +72,7 @@ export default function TransactionClient({
           <ArrowLeft className="h-5 w-5 text-[#003644]" />
         </Link>
         <h1 className="text-[20px] font-semibold text-[#003644]">
-          Transaktion prüfen
+          Transaktionsübersicht
         </h1>
       </div>
 
@@ -72,6 +94,11 @@ export default function TransactionClient({
             {transaction.expectedReturnDate && (
               <span className="rounded-full bg-[#e9e8e7] px-3 py-1 text-[11px]">
                 Bis {format(transaction.expectedReturnDate, "dd.MM.yyyy")}
+              </span>
+            )}
+            {isFullyConfirmed && (
+              <span className="rounded-full bg-green-100 text-green-800 px-3 py-1 text-[11px]">
+                Bestätigt
               </span>
             )}
           </div>
@@ -135,21 +162,23 @@ export default function TransactionClient({
           </div>
         </StackCard>
 
-        <label className="mt-6 flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            checked={agreed}
-            onChange={(e) => setAgreed(e.target.checked)}
-            className="mt-1 h-5 w-5 rounded border-[#c0c8cb]"
-          />
-          <span className="text-[15px] text-[#40484b]">
-            Ich bestätige, dass ich die{" "}
-            <span className="font-semibold text-[#003644] underline">
-              Nutzungsbedingungen
-            </span>{" "}
-            und Haftungsregeln gelesen habe und akzeptiere.
-          </span>
-        </label>
+        {!hasConfirmed && !isFullyConfirmed && (
+          <label className="mt-6 flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-1 h-5 w-5 rounded border-[#c0c8cb]"
+            />
+            <span className="text-[15px] text-[#40484b]">
+              Ich bestätige, dass ich die{" "}
+              <span className="font-semibold text-[#003644] underline">
+                Nutzungsbedingungen
+              </span>{" "}
+              und Haftungsregeln gelesen habe und akzeptiere.
+            </span>
+          </label>
+        )}
       </div>
 
       {/* Desktop Content */}
@@ -167,10 +196,10 @@ export default function TransactionClient({
           </div>
 
           <h1 className="text-[44px] font-semibold leading-tight text-[#003644]">
-            Review Transaction
+            Transaction Overview
           </h1>
           <p className="mt-2 text-[#40484b]">
-            Please verify the details below before finalizing the agreement.
+            Overview of your transaction details.
           </p>
 
           <div className="mt-8 grid grid-cols-12 gap-6">
@@ -187,9 +216,16 @@ export default function TransactionClient({
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="mb-2 inline-block rounded-full bg-[#134e5e]/10 px-3 py-1 text-xs text-[#003644]">
-                          {isMoney ? "Money Loan" : "Item Loan"}
-                        </p>
+                        <div className="flex gap-2 mb-2">
+                          <p className="inline-block rounded-full bg-[#134e5e]/10 px-3 py-1 text-xs text-[#003644]">
+                            {isMoney ? "Money Loan" : "Item Loan"}
+                          </p>
+                          {isFullyConfirmed && (
+                            <p className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs text-green-800">
+                              Confirmed
+                            </p>
+                          )}
+                        </div>
                         <h2 className="text-[38px] font-semibold leading-tight">
                           {isMoney
                             ? `${transaction.amount} €`
@@ -253,31 +289,57 @@ export default function TransactionClient({
                 <p className="mb-4 text-xs uppercase tracking-widest text-[#40484b]">
                   Parties Involved
                 </p>
-                <p className="text-sm font-medium">
-                  Lender:{" "}
-                  <span className="font-normal text-[#40484b]">
-                    {lenderName}
+                <p className="text-sm font-medium flex items-center justify-between">
+                  <span>
+                    Lender:{" "}
+                    <span className="font-normal text-[#40484b]">
+                      {lenderName}
+                    </span>
                   </span>
+                  {(transaction.isCreatorLender ? transaction.creatorConfirmed : transaction.partnerConfirmed) && (
+                     <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  )}
                 </p>
-                <p className="mt-2 text-sm font-medium">
-                  Borrower:{" "}
-                  <span className="font-normal text-[#40484b]">
-                    {borrowerName}
+                <p className="mt-2 text-sm font-medium flex items-center justify-between">
+                  <span>
+                    Borrower:{" "}
+                    <span className="font-normal text-[#40484b]">
+                      {borrowerName}
+                    </span>
                   </span>
+                  {(!transaction.isCreatorLender ? transaction.creatorConfirmed : transaction.partnerConfirmed) && (
+                     <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  )}
                 </p>
               </div>
+              
               <div className="rounded-xl border-2 border-[#003644]/20 bg-white p-6 shadow-sm">
-                <button
-                  onClick={() => setOpenModal(true)}
-                  className="w-full rounded-lg bg-[#003644] py-3 font-semibold text-white hover:brightness-110 transition-all"
-                >
-                  Confirm Agreement
-                </button>
-                <button className="mt-3 w-full rounded-lg border border-[#003644] py-3 text-sm text-[#003644] hover:bg-[#003644]/5 transition-colors">
-                  Verlängerung anfragen
+                {!hasConfirmed ? (
+                  <>
+                    <button
+                      onClick={handleConfirm}
+                      disabled={isLoading}
+                      className="w-full rounded-lg bg-[#003644] py-3 font-semibold text-white hover:brightness-110 transition-all disabled:opacity-50"
+                    >
+                      {isLoading ? "Confirming..." : "Confirm Agreement"}
+                    </button>
+                    <p className="text-xs text-center text-[#40484b] mt-2">By confirming you agree to the terms.</p>
+                  </>
+                ) : !isFullyConfirmed ? (
+                  <div className="text-center p-3 bg-amber-50 rounded-lg text-amber-800 text-sm font-medium">
+                    Waiting for the other party to confirm.
+                  </div>
+                ) : (
+                  <div className="text-center p-3 bg-green-50 rounded-lg text-green-800 text-sm font-medium">
+                    Transaction is fully confirmed and active.
+                  </div>
+                )}
+
+                <button className="mt-4 w-full rounded-lg border border-[#003644] py-3 text-sm text-[#003644] hover:bg-[#003644]/5 transition-colors">
+                  Request Extension
                 </button>
                 <button className="mt-3 w-full rounded-lg border border-[#c0c8cb] py-3 text-sm text-[#40484b] hover:bg-gray-50 transition-colors">
-                  als beendet markieren
+                  Mark as finished
                 </button>
               </div>
             </div>
@@ -288,18 +350,34 @@ export default function TransactionClient({
       {/* Mobile Sticky Action Footer */}
       <div className="fixed bottom-20 left-0 right-0 z-30 border-t border-[#c0c8cb] bg-[#faf9f8] p-5 md:hidden">
         <div className="mx-auto flex max-w-md flex-col gap-2">
-          <button
-            disabled={!agreed}
-            onClick={() => setOpenModal(true)}
-            className="w-full rounded-xl bg-[#003644] py-4 font-semibold text-white disabled:opacity-50 hover:brightness-110 transition-all"
-          >
-            Vereinbarung bestätigen
-          </button>
+          {!hasConfirmed ? (
+            <button
+              disabled={!agreed || isLoading}
+              onClick={handleConfirm}
+              className="w-full rounded-xl bg-[#003644] py-4 font-semibold text-white disabled:opacity-50 hover:brightness-110 transition-all"
+            >
+              {isLoading ? "Wird bestätigt..." : "Vereinbarung bestätigen"}
+            </button>
+          ) : !isFullyConfirmed ? (
+            <button
+              disabled
+              className="w-full rounded-xl bg-[#f4f3f2] py-4 font-semibold text-[#70787c] disabled:opacity-100"
+            >
+              Wartet auf Bestätigung...
+            </button>
+          ) : (
+            <button
+              disabled
+              className="w-full rounded-xl bg-green-100 py-4 font-semibold text-green-800 disabled:opacity-100"
+            >
+              Vollständig bestätigt
+            </button>
+          )}
           <Link
             href="/dashboard"
             className="w-full rounded-lg py-2 text-center font-medium text-[#003644]"
           >
-            Abbrechen
+            Zurück
           </Link>
         </div>
       </div>
@@ -311,8 +389,7 @@ export default function TransactionClient({
             <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-[#003644]" />
             <h2 className="text-3xl font-semibold">Confirmed!</h2>
             <p className="mt-2 text-[#40484b]">
-              Your transaction has been finalized and both parties have been
-              notified.
+              Your transaction has been confirmed. {isFullyConfirmed ? "Both parties have agreed." : "We are waiting for the other party to confirm."}
             </p>
             <button
               onClick={() => setOpenModal(false)}
