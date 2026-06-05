@@ -20,6 +20,9 @@ import {
   confirmTransaction,
   markTransactionAsReturned,
   confirmTransactionReturn,
+  requestTransactionExtension,
+  acceptTransactionExtension,
+  declineTransactionExtension,
 } from "@/app/[locale]/actions/transaction";
 import { useNotifications } from "@/components/NotificationProvider";
 
@@ -33,6 +36,8 @@ export default function TransactionClient({
   const [agreed, setAgreed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
+  const [extensionDate, setExtensionDate] = useState("");
   const { addNotification } = useNotifications();
 
   const isMoney = transaction.type === "MONEY";
@@ -44,11 +49,13 @@ export default function TransactionClient({
     ? transaction.partyName
     : `${userName} (Du)`;
 
-  const hasConfirmed = transaction.isCreator
+  const isCreator = transaction.isLentByMe === transaction.isCreatorLender;
+
+  const hasConfirmed = isCreator
     ? transaction.creatorConfirmed
     : transaction.partnerConfirmed;
 
-  const otherPartyConfirmed = transaction.isCreator
+  const otherPartyConfirmed = isCreator
     ? transaction.partnerConfirmed
     : transaction.creatorConfirmed;
 
@@ -107,10 +114,58 @@ export default function TransactionClient({
   };
 
   const handleRequestExtension = () => {
-    addNotification(
-      "reminder",
-      `Extension requested for ${transaction.itemName || "item"}.`,
-    );
+    setIsExtensionDialogOpen(true);
+  };
+
+  const submitExtensionRequest = async () => {
+    if (!extensionDate) return;
+    setIsLoading(true);
+    try {
+      await requestTransactionExtension(
+        transaction.id,
+        new Date(extensionDate),
+      );
+      setIsExtensionDialogOpen(false);
+      addNotification(
+        "reminder",
+        `Extension to ${format(new Date(extensionDate), "dd.MM.yyyy")} requested for ${transaction.itemName || "item"}.`,
+      );
+      setExtensionDate("");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAcceptExtension = async () => {
+    setIsLoading(true);
+    try {
+      await acceptTransactionExtension(transaction.id);
+      addNotification(
+        "confirmed",
+        `Extension accepted for ${transaction.itemName || "item"}.`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeclineExtension = async () => {
+    setIsLoading(true);
+    try {
+      await declineTransactionExtension(transaction.id);
+      addNotification(
+        "reminder",
+        `Extension declined for ${transaction.itemName || "item"}.`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -440,7 +495,50 @@ export default function TransactionClient({
 
                 {isFullyConfirmed && !isCompleted && (
                   <div className="mt-4 space-y-3">
-                    {transaction.isLentByMe ? (
+                    {transaction.requestedExtensionDate ? (
+                      transaction.isLentByMe ? (
+                        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                          <p className="mb-3 text-sm text-amber-800">
+                            Extension requested until{" "}
+                            <strong>
+                              {format(
+                                new Date(transaction.requestedExtensionDate),
+                                "dd.MM.yyyy",
+                              )}
+                            </strong>
+                            .
+                          </p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleAcceptExtension}
+                              disabled={isLoading}
+                              className="flex-1 rounded-lg bg-amber-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
+                            >
+                              Accept
+                            </button>
+                            <button
+                              onClick={handleDeclineExtension}
+                              disabled={isLoading}
+                              className="flex-1 rounded-lg border border-amber-600 py-2.5 text-sm font-semibold text-amber-700 transition-colors hover:bg-amber-100 disabled:opacity-50"
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          disabled
+                          className="w-full rounded-lg bg-amber-50 py-3 text-sm font-medium text-amber-600 opacity-70"
+                        >
+                          Extension to{" "}
+                          {format(
+                            new Date(transaction.requestedExtensionDate),
+                            "dd.MM.yyyy",
+                          )}{" "}
+                          pending
+                        </button>
+                      )
+                    ) : transaction.isLentByMe ? (
                       <>
                         <button
                           onClick={handleConfirmReturn}
@@ -510,12 +608,55 @@ export default function TransactionClient({
             >
               Rückgabe ausstehend
             </button>
+          ) : isCompleted ? (
+            <button
+              disabled
+              className="w-full rounded-xl bg-[#e3e2e1] py-4 font-semibold text-[#40484b] disabled:opacity-100"
+            >
+              Abgeschlossen
+            </button>
+          ) : transaction.requestedExtensionDate ? (
+            transaction.isLentByMe ? (
+              <div className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3">
+                <p className="text-center text-[13px] font-medium text-amber-800">
+                  Extension to{" "}
+                  {format(
+                    new Date(transaction.requestedExtensionDate),
+                    "dd.MM.yyyy",
+                  )}{" "}
+                  requested
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleAcceptExtension}
+                    disabled={isLoading}
+                    className="flex-1 rounded-lg bg-amber-600 py-3 text-sm font-semibold text-white disabled:opacity-50"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={handleDeclineExtension}
+                    disabled={isLoading}
+                    className="flex-1 rounded-lg border border-amber-600 py-3 text-sm font-semibold text-amber-700 disabled:opacity-50"
+                  >
+                    Decline
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                disabled
+                className="w-full rounded-xl bg-amber-50 py-4 font-semibold text-amber-700 opacity-80"
+              >
+                Extension pending
+              </button>
+            )
           ) : (
             <button
               disabled
-              className={`w-full rounded-xl py-4 font-semibold disabled:opacity-100 ${isCompleted ? "bg-[#e3e2e1] text-[#40484b]" : "bg-green-100 text-green-800"}`}
+              className="w-full rounded-xl bg-green-100 py-4 font-semibold text-green-800 disabled:opacity-100"
             >
-              {isCompleted ? "Abgeschlossen" : "Vollständig bestätigt"}
+              Vollständig bestätigt
             </button>
           )}
           <Link
@@ -545,6 +686,55 @@ export default function TransactionClient({
             >
               Great, thanks!
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Extension Request Modal */}
+      {isExtensionDialogOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#1a1c1c]/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-2 text-lg font-bold text-[#003644]">
+              Request Extension
+            </h3>
+            <p className="mb-4 text-sm text-[#40484b]">
+              Select a new return date for &quot;
+              {isMoney
+                ? `${transaction.amount} €`
+                : transaction.itemName || "this item"}
+              &quot;.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[#40484b]">
+                  New Return Date
+                </label>
+                <input
+                  type="date"
+                  value={extensionDate}
+                  onChange={(e) => setExtensionDate(e.target.value)}
+                  className="w-full rounded-lg border border-[#c0c8cb] bg-[#f5f2ed] px-4 py-3 outline-none focus:ring-2 focus:ring-[#306576]"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    setIsExtensionDialogOpen(false);
+                    setExtensionDate("");
+                  }}
+                  className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={submitExtensionRequest}
+                  disabled={!extensionDate}
+                  className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c] disabled:opacity-50"
+                >
+                  Request
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

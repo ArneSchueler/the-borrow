@@ -155,6 +155,54 @@ export async function confirmTransactionReturn(transactionId: string) {
   revalidatePath(`/`);
 }
 
+export async function requestTransactionExtension(
+  transactionId: string,
+  newDate: Date,
+) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { requestedExtensionDate: newDate },
+  });
+
+  revalidatePath(`/`);
+}
+
+export async function acceptTransactionExtension(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  const transaction = await prisma.transaction.findUnique({
+    where: { id: transactionId },
+  });
+
+  if (!transaction || !transaction.requestedExtensionDate) return;
+
+  await prisma.transaction.update({
+    where: { id: transactionId },
+    data: {
+      expectedReturnDate: transaction.requestedExtensionDate,
+      requestedExtensionDate: null,
+    },
+  });
+
+  revalidatePath(`/`);
+}
+
+export async function declineTransactionExtension(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { requestedExtensionDate: null },
+  });
+
+  revalidatePath(`/`);
+}
+
 export async function searchTransactions(query: string) {
   const session = await auth();
   if (!session?.user?.email) {
@@ -206,5 +254,6 @@ export async function searchTransactions(query: string) {
       t.creatorId === user.id ? t.partnerEmail || "Unknown" : t.creator.email,
     isLentByMe:
       t.creatorId === user.id ? t.isCreatorLender : !t.isCreatorLender,
+    isCreator: t.creatorId === user.id,
   }));
 }

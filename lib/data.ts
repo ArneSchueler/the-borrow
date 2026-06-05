@@ -5,9 +5,12 @@ export type EnrichedTransaction = Transaction & {
   isLentByMe: boolean;
   partyName: string;
   isCreator: boolean;
+  requestedExtensionDate?: Date | null;
 };
 
-export async function getUserTransactions(userEmail: string): Promise<EnrichedTransaction[]> {
+export async function getUserTransactions(
+  userEmail: string,
+): Promise<EnrichedTransaction[]> {
   const user = await prisma.user.findUnique({
     where: { email: userEmail },
   });
@@ -18,15 +21,12 @@ export async function getUserTransactions(userEmail: string): Promise<EnrichedTr
 
   const transactions = await prisma.transaction.findMany({
     where: {
-      OR: [
-        { creatorId: user.id },
-        { partnerEmail: userEmail }
-      ]
+      OR: [{ creatorId: user.id }, { partnerEmail: userEmail }],
     },
     include: {
-      creator: true
+      creator: true,
     },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: "desc" },
   });
 
   return transactions.map((t) => {

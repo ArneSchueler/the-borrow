@@ -47,6 +47,7 @@ model Transaction {
   // Common details
   lendingDate        DateTime?
   expectedReturnDate DateTime?
+  requestedExtensionDate DateTime?
   notes              String?
 
   // Relations and Parties
