@@ -379,6 +379,7 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
               </div>
             </div>
           </div>,
+          document.body,
         )}
     </div>
   );
