@@ -1,7 +1,10 @@
 import { auth } from "../../../../auth";
 import { redirect, Link } from "@/src/i18n/routing";
 import { getUserTransactions } from "@/lib/data";
-import { MobileTransactionCard, DesktopTransactionCard } from "@/components/TransactionCard";
+import {
+  MobileTransactionCard,
+  DesktopTransactionCard,
+} from "@/components/TransactionCard";
 
 import { getLocale } from "next-intl/server";
 
@@ -23,14 +26,20 @@ export default async function LentPage({ searchParams }: PageProps) {
 
   if (q) {
     const searchLower = q.toLowerCase();
-    transactions = transactions.filter((tx) =>
-      (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
-      (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
-      (tx.notes && tx.notes.toLowerCase().includes(searchLower))
+    transactions = transactions.filter(
+      (tx) =>
+        (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
+        (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
+        (tx.notes && tx.notes.toLowerCase().includes(searchLower)),
     );
   }
 
-  const lentTransactions = transactions.filter((t) => t.isLentByMe);
+  const lentTransactions = transactions.filter(
+    (t) => t.isLentByMe && t.status !== "COMPLETED",
+  );
+  const completedTransactions = transactions.filter(
+    (t) => t.isLentByMe && t.status === "COMPLETED",
+  );
 
   return (
     <>
@@ -56,6 +65,19 @@ export default async function LentPage({ searchParams }: PageProps) {
             )}
           </div>
         </section>
+
+        {completedTransactions.length > 0 && (
+          <section className="mt-8 space-y-3">
+            <h2 className="text-[22px] font-semibold text-[#0d4f63]">
+              Abgeschlossen
+            </h2>
+            <div className="space-y-2">
+              {completedTransactions.map((t) => (
+                <MobileTransactionCard key={t.id} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Desktop Content */}
@@ -75,14 +97,20 @@ export default async function LentPage({ searchParams }: PageProps) {
           {lentTransactions.map((t) => (
             <DesktopTransactionCard key={t.id} t={t} />
           ))}
-          <Link
-            href="/new-transaction"
-            className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#c0c8cb] bg-[#f4f3f2] text-[#7a8388] min-h-[250px]"
-          >
-            <span className="text-4xl">+</span>
-            <span className="text-sm">Lend something new</span>
-          </Link>
         </div>
+
+        {completedTransactions.length > 0 && (
+          <section className="mt-12">
+            <h3 className="mb-6 text-[28px] font-semibold text-[#0d4f63]">
+              Completed (Abgeschlossen)
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              {completedTransactions.map((t) => (
+                <DesktopTransactionCard key={t.id} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </>
   );

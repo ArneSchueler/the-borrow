@@ -26,15 +26,20 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 
   if (q) {
     const searchLower = q.toLowerCase();
-    transactions = transactions.filter((tx) =>
-      (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
-      (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
-      (tx.notes && tx.notes.toLowerCase().includes(searchLower))
+    transactions = transactions.filter(
+      (tx) =>
+        (tx.itemName && tx.itemName.toLowerCase().includes(searchLower)) ||
+        (tx.partyName && tx.partyName.toLowerCase().includes(searchLower)) ||
+        (tx.notes && tx.notes.toLowerCase().includes(searchLower)),
     );
   }
 
-  const lentTransactions = transactions.filter((tx) => tx.isLentByMe);
-  const borrowedTransactions = transactions.filter((tx) => !tx.isLentByMe);
+  const lentTransactions = transactions.filter(
+    (tx) => tx.isLentByMe && tx.status !== "COMPLETED",
+  );
+  const borrowedTransactions = transactions.filter(
+    (tx) => !tx.isLentByMe && tx.status !== "COMPLETED",
+  );
 
   return (
     <>

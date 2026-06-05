@@ -16,7 +16,12 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { EnrichedTransaction } from "@/lib/data";
-import { confirmTransaction } from "@/app/[locale]/actions/transaction";
+import {
+  confirmTransaction,
+  markTransactionAsReturned,
+  confirmTransactionReturn,
+} from "@/app/[locale]/actions/transaction";
+import { useNotifications } from "@/components/NotificationProvider";
 
 export default function TransactionClient({
   transaction,
@@ -28,6 +33,7 @@ export default function TransactionClient({
   const [agreed, setAgreed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const isMoney = transaction.type === "MONEY";
 
@@ -41,12 +47,15 @@ export default function TransactionClient({
   const hasConfirmed = transaction.isCreator
     ? transaction.creatorConfirmed
     : transaction.partnerConfirmed;
-    
+
   const otherPartyConfirmed = transaction.isCreator
     ? transaction.partnerConfirmed
     : transaction.creatorConfirmed;
 
-  const isFullyConfirmed = transaction.creatorConfirmed && transaction.partnerConfirmed;
+  const isCompleted = transaction.status === "COMPLETED";
+  const isPendingReturn = transaction.status === "PENDING_RETURN";
+  const isFullyConfirmed =
+    transaction.creatorConfirmed && transaction.partnerConfirmed;
 
   const handleConfirm = async () => {
     setIsLoading(true);
@@ -58,6 +67,50 @@ export default function TransactionClient({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReturn = async () => {
+    setIsLoading(true);
+    try {
+      await markTransactionAsReturned(transaction.id);
+      addNotification(
+        "returned",
+        `Status updated to Pending Return for ${transaction.itemName || "item"}.`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirmReturn = async () => {
+    setIsLoading(true);
+    try {
+      await confirmTransactionReturn(transaction.id);
+      addNotification(
+        "confirmed",
+        `Transaction successfully marked as completed for ${transaction.itemName || "item"}.`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemind = () => {
+    addNotification(
+      "reminder",
+      `Reminder sent to the other party for ${transaction.itemName || "item"}!`,
+    );
+  };
+
+  const handleRequestExtension = () => {
+    addNotification(
+      "reminder",
+      `Extension requested for ${transaction.itemName || "item"}.`,
+    );
   };
 
   return (
@@ -96,9 +149,19 @@ export default function TransactionClient({
                 Bis {format(transaction.expectedReturnDate, "dd.MM.yyyy")}
               </span>
             )}
-            {isFullyConfirmed && (
+            {isFullyConfirmed && !isCompleted && !isPendingReturn && (
               <span className="rounded-full bg-green-100 text-green-800 px-3 py-1 text-[11px]">
                 Bestätigt
+              </span>
+            )}
+            {isPendingReturn && (
+              <span className="rounded-full bg-green-100 text-green-800 px-3 py-1 text-[11px]">
+                Bestätigt
+              </span>
+            )}
+            {isCompleted && (
+              <span className="rounded-full bg-[#e3e2e1] text-[#40484b] px-3 py-1 text-[11px]">
+                Abgeschlossen
               </span>
             )}
           </div>
@@ -134,7 +197,9 @@ export default function TransactionClient({
               </span>
             </div>
             <div className="rounded-lg bg-[#f4f3f2] p-3 text-sm italic">
-              &quot;{isMoney ? "Geliehener Betrag." : "Wie vereinbart übergeben."}&quot;
+              &quot;
+              {isMoney ? "Geliehener Betrag." : "Wie vereinbart übergeben."}
+              &quot;
             </div>
           </div>
         </StackCard>
@@ -150,6 +215,13 @@ export default function TransactionClient({
                   : "Kein Datum"
               }
             />
+            {(isCompleted || isPendingReturn) && transaction.updatedAt && (
+              <Term
+                icon={<CheckCircle2 className="h-4 w-4 text-green-700" />}
+                label="Zurückgegeben am"
+                value={format(new Date(transaction.updatedAt), "dd. MMM yyyy")}
+              />
+            )}
             {!isMoney && (
               <div className="flex gap-2 rounded-lg bg-[#ffdad6] p-3 text-sm text-[#93000a]">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
@@ -220,9 +292,14 @@ export default function TransactionClient({
                           <p className="inline-block rounded-full bg-[#134e5e]/10 px-3 py-1 text-xs text-[#003644]">
                             {isMoney ? "Money Loan" : "Item Loan"}
                           </p>
-                          {isFullyConfirmed && (
+                          {isFullyConfirmed && !isCompleted && (
                             <p className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs text-green-800">
                               Confirmed
+                            </p>
+                          )}
+                          {isCompleted && (
+                            <p className="inline-block rounded-full bg-[#e3e2e1] px-3 py-1 text-xs text-[#40484b]">
+                              Completed
                             </p>
                           )}
                         </div>
@@ -250,15 +327,29 @@ export default function TransactionClient({
                         : "Wie vereinbart übergeben. To be returned in the same condition as received."}
                     </p>
                     <div className="mt-4 grid grid-cols-2 gap-4 border-t border-[#c0c8cb] pt-4">
-                      <p className="text-sm text-[#40484b]">
-                        End Date:{" "}
-                        {transaction.expectedReturnDate
-                          ? format(
-                              transaction.expectedReturnDate,
-                              "dd. MMM yyyy",
-                            )
-                          : "Kein Datum"}
-                      </p>
+                      <div className="space-y-1">
+                        <p className="text-sm text-[#40484b]">
+                          End Date:{" "}
+                          {transaction.expectedReturnDate
+                            ? format(
+                                transaction.expectedReturnDate,
+                                "dd. MMM yyyy",
+                              )
+                            : "Kein Datum"}
+                        </p>
+                        {(isCompleted || isPendingReturn) &&
+                          transaction.updatedAt && (
+                            <p className="text-sm text-[#40484b]">
+                              Returned on:{" "}
+                              <span className="font-medium text-[#003644]">
+                                {format(
+                                  new Date(transaction.updatedAt),
+                                  "dd. MMM yyyy",
+                                )}
+                              </span>
+                            </p>
+                          )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -296,8 +387,10 @@ export default function TransactionClient({
                       {lenderName}
                     </span>
                   </span>
-                  {(transaction.isCreatorLender ? transaction.creatorConfirmed : transaction.partnerConfirmed) && (
-                     <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  {(transaction.isCreatorLender
+                    ? transaction.creatorConfirmed
+                    : transaction.partnerConfirmed) && (
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
                   )}
                 </p>
                 <p className="mt-2 text-sm font-medium flex items-center justify-between">
@@ -307,12 +400,14 @@ export default function TransactionClient({
                       {borrowerName}
                     </span>
                   </span>
-                  {(!transaction.isCreatorLender ? transaction.creatorConfirmed : transaction.partnerConfirmed) && (
-                     <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  {(!transaction.isCreatorLender
+                    ? transaction.creatorConfirmed
+                    : transaction.partnerConfirmed) && (
+                    <CheckCircle2 className="w-4 h-4 text-green-600" />
                   )}
                 </p>
               </div>
-              
+
               <div className="rounded-xl border-2 border-[#003644]/20 bg-white p-6 shadow-sm">
                 {!hasConfirmed ? (
                   <>
@@ -323,24 +418,67 @@ export default function TransactionClient({
                     >
                       {isLoading ? "Confirming..." : "Confirm Agreement"}
                     </button>
-                    <p className="text-xs text-center text-[#40484b] mt-2">By confirming you agree to the terms.</p>
+                    <p className="text-xs text-center text-[#40484b] mt-2">
+                      By confirming you agree to the terms.
+                    </p>
                   </>
                 ) : !isFullyConfirmed ? (
                   <div className="text-center p-3 bg-amber-50 rounded-lg text-amber-800 text-sm font-medium">
-                    Waiting for the other party to confirm.
+                    Awaiting confirmation
+                  </div>
+                ) : isPendingReturn ? (
+                  <div className="text-center p-3 bg-blue-50 rounded-lg text-blue-800 text-sm font-medium">
+                    Item returned. Awaiting final confirmation.
                   </div>
                 ) : (
                   <div className="text-center p-3 bg-green-50 rounded-lg text-green-800 text-sm font-medium">
-                    Transaction is fully confirmed and active.
+                    {isCompleted
+                      ? "Transaction is completed."
+                      : "Transaction is fully confirmed and active."}
                   </div>
                 )}
 
-                <button className="mt-4 w-full rounded-lg border border-[#003644] py-3 text-sm text-[#003644] hover:bg-[#003644]/5 transition-colors">
-                  Request Extension
-                </button>
-                <button className="mt-3 w-full rounded-lg border border-[#c0c8cb] py-3 text-sm text-[#40484b] hover:bg-gray-50 transition-colors">
-                  Mark as finished
-                </button>
+                {isFullyConfirmed && !isCompleted && (
+                  <div className="mt-4 space-y-3">
+                    {transaction.isLentByMe ? (
+                      <>
+                        <button
+                          onClick={handleConfirmReturn}
+                          disabled={isLoading}
+                          className="w-full rounded-lg bg-[#0d4f63] py-3 font-semibold text-white hover:bg-[#0a3d4c] transition-colors disabled:opacity-50"
+                        >
+                          Confirm Return
+                        </button>
+                        <button
+                          onClick={handleRemind}
+                          disabled={isLoading}
+                          className="w-full rounded-lg border border-[#003644] py-3 text-sm font-medium text-[#003644] hover:bg-[#003644]/5 transition-colors disabled:opacity-50"
+                        >
+                          Remind Party
+                        </button>
+                      </>
+                    ) : (
+                      !isPendingReturn && (
+                        <>
+                          <button
+                            onClick={handleReturn}
+                            disabled={isLoading}
+                            className="w-full rounded-lg bg-[#0d4f63] py-3 font-semibold text-white hover:bg-[#0a3d4c] transition-colors disabled:opacity-50"
+                          >
+                            {isMoney ? "Pay Now" : "Return Item"}
+                          </button>
+                          <button
+                            onClick={handleRequestExtension}
+                            disabled={isLoading}
+                            className="w-full rounded-lg border border-[#003644] py-3 text-sm font-medium text-[#003644] hover:bg-[#003644]/5 transition-colors disabled:opacity-50"
+                          >
+                            Request Extension
+                          </button>
+                        </>
+                      )
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -365,12 +503,19 @@ export default function TransactionClient({
             >
               Wartet auf Bestätigung...
             </button>
+          ) : isPendingReturn ? (
+            <button
+              disabled
+              className="w-full rounded-xl bg-blue-100 py-4 font-semibold text-blue-800 disabled:opacity-100"
+            >
+              Rückgabe ausstehend
+            </button>
           ) : (
             <button
               disabled
-              className="w-full rounded-xl bg-green-100 py-4 font-semibold text-green-800 disabled:opacity-100"
+              className={`w-full rounded-xl py-4 font-semibold disabled:opacity-100 ${isCompleted ? "bg-[#e3e2e1] text-[#40484b]" : "bg-green-100 text-green-800"}`}
             >
-              Vollständig bestätigt
+              {isCompleted ? "Abgeschlossen" : "Vollständig bestätigt"}
             </button>
           )}
           <Link
@@ -389,7 +534,10 @@ export default function TransactionClient({
             <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-[#003644]" />
             <h2 className="text-3xl font-semibold">Confirmed!</h2>
             <p className="mt-2 text-[#40484b]">
-              Your transaction has been confirmed. {isFullyConfirmed ? "Both parties have agreed." : "We are waiting for the other party to confirm."}
+              Your transaction has been confirmed.{" "}
+              {isFullyConfirmed
+                ? "Both parties have agreed."
+                : "We are waiting for the other party to confirm."}
             </p>
             <button
               onClick={() => setOpenModal(false)}

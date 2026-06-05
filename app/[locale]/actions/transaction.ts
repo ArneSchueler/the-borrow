@@ -118,7 +118,10 @@ export async function confirmTransaction(transactionId: string) {
     where: { id: transactionId },
   });
 
-  if (updatedTransaction?.creatorConfirmed && updatedTransaction?.partnerConfirmed) {
+  if (
+    updatedTransaction?.creatorConfirmed &&
+    updatedTransaction?.partnerConfirmed
+  ) {
     await prisma.transaction.update({
       where: { id: transactionId },
       data: { status: "ACTIVE" },
@@ -126,4 +129,82 @@ export async function confirmTransaction(transactionId: string) {
   }
 
   revalidatePath(`/`);
+}
+
+export async function markTransactionAsReturned(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { status: "PENDING_RETURN" },
+  });
+
+  revalidatePath(`/`);
+}
+
+export async function confirmTransactionReturn(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { status: "COMPLETED" },
+  });
+
+  revalidatePath(`/`);
+}
+
+export async function searchTransactions(query: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return [];
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    return [];
+  }
+
+  // Fetch all transactions for the user
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      OR: [{ creatorId: user.id }, { partnerEmail: user.email }],
+    },
+    include: {
+      creator: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+
+  // Filter in memory to support partial matching on numbers
+  const lowerQuery = query.toLowerCase();
+  const normalizedQuery = query.replace(",", "."); // Handle EU comma decimals
+
+  const filteredTransactions = transactions.filter((t) => {
+    const amountStr = t.amount?.toString() || "";
+    return (
+      t.itemName?.toLowerCase().includes(lowerQuery) ||
+      t.partnerEmail?.toLowerCase().includes(lowerQuery) ||
+      t.notes?.toLowerCase().includes(lowerQuery) ||
+      t.creator?.email?.toLowerCase().includes(lowerQuery) ||
+      amountStr.includes(normalizedQuery) ||
+      amountStr.replace(".", ",").includes(query)
+    );
+  });
+
+  // Take the top 10 results and enrich them
+  return filteredTransactions.slice(0, 10).map((t) => ({
+    ...t,
+    partyName:
+      t.creatorId === user.id ? t.partnerEmail || "Unknown" : t.creator.email,
+    isLentByMe:
+      t.creatorId === user.id ? t.isCreatorLender : !t.isCreatorLender,
+  }));
 }
