@@ -203,6 +203,15 @@ export async function declineTransactionExtension(transactionId: string) {
   revalidatePath(`/`);
 }
 
+export async function remindTransactionParty(transactionId: string) {
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("Unauthorized");
+
+  // TODO: Implement actual email sending (e.g., using Resend or SendGrid)
+  // or create a Notification record in the database for the other user here.
+  console.log(`Reminder triggered for transaction: ${transactionId}`);
+}
+
 export async function searchTransactions(query: string) {
   const session = await auth();
   if (!session?.user?.email) {

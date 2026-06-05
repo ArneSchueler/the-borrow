@@ -11,8 +11,10 @@ import {
   requestTransactionExtension,
   acceptTransactionExtension,
   declineTransactionExtension,
+  remindTransactionParty,
 } from "@/app/[locale]/actions/transaction";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNotifications } from "@/components/NotificationProvider";
 
 export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
@@ -25,6 +27,11 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
   const [extensionDate, setExtensionDate] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { addNotification } = useNotifications();
   const isFullyConfirmed = t.creatorConfirmed && t.partnerConfirmed;
@@ -67,12 +74,20 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
     }
   };
 
-  const handleRemind = (e: React.MouseEvent) => {
+  const handleRemind = async (e: React.MouseEvent) => {
     e.preventDefault();
-    addNotification(
-      "reminder",
-      `Reminder sent to the other party for ${t.itemName || "item"}!`,
-    );
+    setIsLoading(true);
+    try {
+      await remindTransactionParty(t.id);
+      addNotification(
+        "reminder",
+        `Reminder sent to the other party for ${t.itemName || "item"}!`,
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRequestExtensionClick = (e: React.MouseEvent) => {
@@ -272,93 +287,99 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
         </div>
       )}
 
-      {showConfirmDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div
-            className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="mb-2 text-lg font-bold text-[#003644]">
-              Confirm Return
-            </h3>
-            <p className="mb-6 text-sm text-[#40484b]">
-              Has &quot;{t.amount ? `${t.amount} €` : t.itemName || "this item"}
-              &quot; really been returned?
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowConfirmDialog(false);
-                }}
-                className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleConfirmReturn();
-                }}
-                disabled={isLoading}
-                className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c] disabled:opacity-50"
-              >
-                {isLoading ? "Confirming..." : "Yes, Confirmed"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isExtensionDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div
-            className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="mb-2 text-lg font-bold text-[#003644]">
-              Request Extension
-            </h3>
-            <p className="mb-4 text-sm text-[#40484b]">
-              Select a new return date for &quot;
-              {t.amount ? `${t.amount} €` : t.itemName || "this item"}
-              &quot;.
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-[#40484b]">
-                  New Return Date
-                </label>
-                <input
-                  type="date"
-                  value={extensionDate}
-                  onChange={(e) => setExtensionDate(e.target.value)}
-                  className="w-full rounded-lg border border-[#c0c8cb] bg-[#f5f2ed] px-4 py-3 outline-none focus:ring-2 focus:ring-[#306576]"
-                />
-              </div>
-              <div className="flex gap-3 pt-2">
+      {mounted &&
+        showConfirmDialog &&
+        createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+            <div
+              className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="mb-2 text-lg font-bold text-[#003644]">
+                Confirm Return
+              </h3>
+              <p className="mb-6 text-sm text-[#40484b]">
+                Has &quot;
+                {t.amount ? `${t.amount} €` : t.itemName || "this item"}
+                &quot; really been returned?
+              </p>
+              <div className="flex gap-3">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    setIsExtensionDialogOpen(false);
-                    setExtensionDate("");
+                    setShowConfirmDialog(false);
                   }}
                   className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={submitExtensionRequest}
-                  disabled={!extensionDate || isLoading}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleConfirmReturn();
+                  }}
+                  disabled={isLoading}
                   className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c] disabled:opacity-50"
                 >
-                  {isLoading ? "Requesting..." : "Request"}
+                  {isLoading ? "Confirming..." : "Yes, Confirmed"}
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
+
+      {mounted &&
+        isExtensionDialogOpen &&
+        createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+            <div
+              className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="mb-2 text-lg font-bold text-[#003644]">
+                Request Extension
+              </h3>
+              <p className="mb-4 text-sm text-[#40484b]">
+                Select a new return date for &quot;
+                {t.amount ? `${t.amount} €` : t.itemName || "this item"}
+                &quot;.
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-[#40484b]">
+                    New Return Date
+                  </label>
+                  <input
+                    type="date"
+                    value={extensionDate}
+                    onChange={(e) => setExtensionDate(e.target.value)}
+                    className="w-full rounded-lg border border-[#c0c8cb] bg-[#f5f2ed] px-4 py-3 outline-none focus:ring-2 focus:ring-[#306576]"
+                  />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsExtensionDialogOpen(false);
+                      setExtensionDate("");
+                    }}
+                    className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={submitExtensionRequest}
+                    disabled={!extensionDate || isLoading}
+                    className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c] disabled:opacity-50"
+                  >
+                    {isLoading ? "Requesting..." : "Request"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>,
+        )}
     </div>
   );
 }

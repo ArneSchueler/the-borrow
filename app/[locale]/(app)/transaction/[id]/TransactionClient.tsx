@@ -23,6 +23,7 @@ import {
   requestTransactionExtension,
   acceptTransactionExtension,
   declineTransactionExtension,
+  remindTransactionParty,
 } from "@/app/[locale]/actions/transaction";
 import { useNotifications } from "@/components/NotificationProvider";
 
@@ -36,6 +37,7 @@ export default function TransactionClient({
   const [agreed, setAgreed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
   const [extensionDate, setExtensionDate] = useState("");
   const { addNotification } = useNotifications();
@@ -91,6 +93,10 @@ export default function TransactionClient({
     }
   };
 
+  const handleConfirmReturnClick = () => {
+    setShowConfirmDialog(true);
+  };
+
   const handleConfirmReturn = async () => {
     setIsLoading(true);
     try {
@@ -99,6 +105,7 @@ export default function TransactionClient({
         "confirmed",
         `Transaction successfully marked as completed for ${transaction.itemName || "item"}.`,
       );
+      setShowConfirmDialog(false);
     } catch (e) {
       console.error(e);
     } finally {
@@ -106,11 +113,19 @@ export default function TransactionClient({
     }
   };
 
-  const handleRemind = () => {
-    addNotification(
-      "reminder",
-      `Reminder sent to the other party for ${transaction.itemName || "item"}!`,
-    );
+  const handleRemind = async () => {
+    setIsLoading(true);
+    try {
+      await remindTransactionParty(transaction.id);
+      addNotification(
+        "reminder",
+        `Reminder sent to the other party for ${transaction.itemName || "item"}!`,
+      );
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRequestExtension = () => {
@@ -541,7 +556,7 @@ export default function TransactionClient({
                     ) : transaction.isLentByMe ? (
                       <>
                         <button
-                          onClick={handleConfirmReturn}
+                          onClick={handleConfirmReturnClick}
                           disabled={isLoading}
                           className="w-full rounded-lg bg-[#0d4f63] py-3 font-semibold text-white hover:bg-[#0a3d4c] transition-colors disabled:opacity-50"
                         >
@@ -686,6 +701,39 @@ export default function TransactionClient({
             >
               Great, thanks!
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Return Modal */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#1a1c1c]/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-2 text-lg font-bold text-[#003644]">
+              Confirm Return
+            </h3>
+            <p className="mb-6 text-sm text-[#40484b]">
+              Has &quot;
+              {isMoney
+                ? `${transaction.amount} €`
+                : transaction.itemName || "this item"}
+              &quot; really been returned?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirmDialog(false)}
+                className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmReturn}
+                disabled={isLoading}
+                className="flex-1 rounded-lg bg-[#0d4f63] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0a3d4c] disabled:opacity-50"
+              >
+                {isLoading ? "Confirming..." : "Yes, Confirmed"}
+              </button>
+            </div>
           </div>
         </div>
       )}
