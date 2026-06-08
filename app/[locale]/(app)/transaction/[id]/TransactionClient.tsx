@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Euro,
   Package,
+  BellRing,
 } from "lucide-react";
 import { format } from "date-fns";
 import { EnrichedTransaction } from "@/lib/data";
@@ -37,6 +38,9 @@ export default function TransactionClient({
   const [agreed, setAgreed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [remindStatus, setRemindStatus] = useState<
+    "idle" | "loading" | "success"
+  >("idle");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
   const [extensionDate, setExtensionDate] = useState("");
@@ -65,6 +69,12 @@ export default function TransactionClient({
   const isPendingReturn = transaction.status === "PENDING_RETURN";
   const isFullyConfirmed =
     transaction.creatorConfirmed && transaction.partnerConfirmed;
+  const hasBeenReminded = Boolean(transaction.lastRemindedAt);
+  const showReminderAlert =
+    hasBeenReminded &&
+    !transaction.isLentByMe &&
+    !isCompleted &&
+    !isPendingReturn;
 
   const handleConfirm = async () => {
     setIsLoading(true);
@@ -114,17 +124,18 @@ export default function TransactionClient({
   };
 
   const handleRemind = async () => {
-    setIsLoading(true);
+    setRemindStatus("loading");
     try {
       await remindTransactionParty(transaction.id);
+      setRemindStatus("success");
       addNotification(
         "reminder",
         `Reminder sent to the other party for ${transaction.itemName || "item"}!`,
       );
+      setTimeout(() => setRemindStatus("idle"), 2000);
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsLoading(false);
+      setRemindStatus("idle");
     }
   };
 
@@ -232,6 +243,12 @@ export default function TransactionClient({
             {isCompleted && (
               <span className="rounded-full bg-[#e3e2e1] text-[#40484b] px-3 py-1 text-[11px]">
                 Abgeschlossen
+              </span>
+            )}
+            {showReminderAlert && (
+              <span className="flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-[11px] font-semibold text-red-700">
+                <BellRing className="h-3 w-3" />
+                Erinnerung
               </span>
             )}
           </div>
@@ -370,6 +387,12 @@ export default function TransactionClient({
                           {isCompleted && (
                             <p className="inline-block rounded-full bg-[#e3e2e1] px-3 py-1 text-xs text-[#40484b]">
                               Completed
+                            </p>
+                          )}
+                          {showReminderAlert && (
+                            <p className="flex items-center gap-1 inline-flex rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800">
+                              <BellRing className="h-3 w-3" />
+                              Reminder Received
                             </p>
                           )}
                         </div>
@@ -564,10 +587,18 @@ export default function TransactionClient({
                         </button>
                         <button
                           onClick={handleRemind}
-                          disabled={isLoading}
-                          className="w-full rounded-lg border border-[#003644] py-3 text-sm font-medium text-[#003644] hover:bg-[#003644]/5 transition-colors disabled:opacity-50"
+                          disabled={isLoading || remindStatus !== "idle"}
+                          className={`w-full rounded-lg border py-3 text-sm font-medium transition-colors disabled:opacity-50 ${
+                            remindStatus === "success"
+                              ? "border-green-600 bg-green-50 text-green-700"
+                              : "border-[#003644] text-[#003644] hover:bg-[#003644]/5"
+                          }`}
                         >
-                          Remind Party
+                          {remindStatus === "loading"
+                            ? "Sending..."
+                            : remindStatus === "success"
+                              ? "Reminder Sent!"
+                              : "Remind Party"}
                         </button>
                       </>
                     ) : (

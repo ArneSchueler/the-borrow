@@ -1,6 +1,17 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import {
+  getUserNotifications,
+  markNotificationsAsRead,
+} from "@/app/[locale]/actions/transaction";
+import { formatDistanceToNow } from "date-fns";
 
 export type Notification = {
   id: string;
@@ -10,16 +21,7 @@ export type Notification = {
   date: string;
 };
 
-// Mock initial data (can be empty array `[]` in production)
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "reminder",
-    message: 'Reminder: "Camera" is due back tomorrow.',
-    read: false,
-    date: "1h ago",
-  },
-];
+const initialNotifications: Notification[] = [];
 
 interface NotificationContextType {
   notifications: Notification[];
@@ -35,6 +37,25 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] =
     useState<Notification[]>(initialNotifications);
 
+  useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const dbNotifs = await getUserNotifications();
+        const formatted = dbNotifs.map((n) => ({
+          id: n.id,
+          type: n.type as Notification["type"],
+          message: n.message,
+          read: n.read,
+          date: formatDistanceToNow(new Date(n.createdAt), { addSuffix: true }),
+        }));
+        setNotifications(formatted);
+      } catch (err) {
+        console.error("Failed to load notifications", err);
+      }
+    }
+    fetchNotifications();
+  }, []);
+
   const addNotification = (type: Notification["type"], message: string) => {
     const newNotif: Notification = {
       id: Math.random().toString(36).substring(7), // Simple unique ID
@@ -46,8 +67,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     setNotifications((prev) => [newNotif, ...prev]);
   };
 
-  const markAllAsRead = () => {
+  const markAllAsRead = async () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    try {
+      await markNotificationsAsRead();
+    } catch (err) {
+      console.error("Failed to mark notifications as read", err);
+    }
   };
 
   return (

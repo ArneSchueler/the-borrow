@@ -6,6 +6,7 @@ export type EnrichedTransaction = Transaction & {
   partyName: string;
   isCreator: boolean;
   requestedExtensionDate?: Date | null;
+  lastRemindedAt?: Date | null;
 };
 
 export async function getUserTransactions(

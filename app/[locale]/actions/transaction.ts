@@ -207,9 +207,73 @@ export async function remindTransactionParty(transactionId: string) {
   const session = await auth();
   if (!session?.user?.email) throw new Error("Unauthorized");
 
-  // TODO: Implement actual email sending (e.g., using Resend or SendGrid)
-  // or create a Notification record in the database for the other user here.
+  const transaction = await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { lastRemindedAt: new Date() },
+    include: { creator: true },
+  });
+
+  // Determine who the reminder is going to
+  const otherPartyEmail =
+    transaction.creator.email === session.user.email
+      ? transaction.partnerEmail
+      : transaction.creator.email;
+
+  if (otherPartyEmail) {
+    const otherUser = await prisma.user.findUnique({
+      where: { email: otherPartyEmail },
+    });
+    if (otherUser) {
+      const itemName = transaction.amount
+        ? `${transaction.amount} €`
+        : transaction.itemName || "an item";
+
+      await prisma.notification.create({
+        data: {
+          userId: otherUser.id,
+          type: "reminder",
+          message: `Reminder: Action required for "${itemName}".`,
+        },
+      });
+    }
+  }
+
   console.log(`Reminder triggered for transaction: ${transactionId}`);
+
+  revalidatePath(`/`);
+}
+
+export async function getUserNotifications() {
+  const session = await auth();
+  if (!session?.user?.email) return [];
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) return [];
+
+  return prisma.notification.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+  });
+}
+
+export async function markNotificationsAsRead() {
+  const session = await auth();
+  if (!session?.user?.email) return;
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) return;
+
+  await prisma.notification.updateMany({
+    where: { userId: user.id, read: false },
+    data: { read: true },
+  });
 }
 
 export async function searchTransactions(query: string) {
@@ -265,4 +329,27 @@ export async function searchTransactions(query: string) {
       t.creatorId === user.id ? t.isCreatorLender : !t.isCreatorLender,
     isCreator: t.creatorId === user.id,
   }));
+}
+
+export async function searchUsersByEmail(query: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return [];
+  }
+
+  if (!query || query.length < 2) return [];
+
+  return prisma.user.findMany({
+    where: {
+      email: {
+        contains: query,
+        mode: "insensitive",
+      },
+      NOT: {
+        email: session.user.email, // Don't return the logged-in user
+      },
+    },
+    select: { email: true, name: true },
+    take: 5,
+  });
 }

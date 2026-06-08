@@ -2,7 +2,14 @@
 
 import { EnrichedTransaction } from "@/lib/data";
 import { format } from "date-fns";
-import { User, CalendarDays, Euro, Package, Clock } from "lucide-react";
+import {
+  User,
+  CalendarDays,
+  Euro,
+  Package,
+  Clock,
+  BellRing,
+} from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
 import {
@@ -19,11 +26,15 @@ import { useNotifications } from "@/components/NotificationProvider";
 
 export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
   const isCompleted = t.status === "COMPLETED";
+  const isPendingReturn = t.status === "PENDING_RETURN";
   const isOverdue =
     t.expectedReturnDate && t.expectedReturnDate < new Date() && !isCompleted;
   const tCard = useTranslations("TransactionCard");
   const tBtn = useTranslations("Buttons");
   const [isLoading, setIsLoading] = useState(false);
+  const [remindStatus, setRemindStatus] = useState<
+    "idle" | "loading" | "success"
+  >("idle");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isExtensionDialogOpen, setIsExtensionDialogOpen] = useState(false);
   const [extensionDate, setExtensionDate] = useState("");
@@ -35,6 +46,9 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
 
   const { addNotification } = useNotifications();
   const isFullyConfirmed = t.creatorConfirmed && t.partnerConfirmed;
+  const hasBeenReminded = Boolean(t.lastRemindedAt);
+  const showReminderAlert =
+    hasBeenReminded && !t.isLentByMe && !isCompleted && !isPendingReturn;
 
   const handleReturn = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,17 +90,18 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
 
   const handleRemind = async (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setRemindStatus("loading");
     try {
       await remindTransactionParty(t.id);
+      setRemindStatus("success");
       addNotification(
         "reminder",
         `Reminder sent to the other party for ${t.itemName || "item"}!`,
       );
+      setTimeout(() => setRemindStatus("idle"), 2000);
     } catch (err) {
       console.error(err);
-    } finally {
-      setIsLoading(false);
+      setRemindStatus("idle");
     }
   };
 
@@ -155,7 +170,9 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
       className={`flex h-full flex-col justify-between rounded-2xl border p-4 transition-all duration-300 ${
         isCompleted
           ? "border-[#e3e2e1] bg-[#faf9f8] opacity-60"
-          : "border-[#d8dcdf] bg-white hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md"
+          : showReminderAlert
+            ? "border-red-300 bg-red-50/50 hover:-translate-y-[2px] hover:border-red-400 hover:shadow-md"
+            : "border-[#d8dcdf] bg-white hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md"
       }`}
     >
       <Link href={`/transaction/${t.id}`} className="group block flex-1">
@@ -163,19 +180,27 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
           <p className="font-title-md text-title-md text-primary group-hover:underline">
             {t.amount ? `${t.amount} €` : t.itemName || tCard("itemFallback")}
           </p>
-          {isOverdue ? (
-            <span className="rounded-full bg-[#ffdad6] px-3 py-1 text-xs font-semibold text-[#d0262d]">
-              {tCard("overdue")}
-            </span>
-          ) : (
-            <div className="bg-primary-container text-on-primary-container flex items-center justify-center rounded-full px-3 py-1 font-label-sm text-label-sm">
-              {t.type === "MONEY" ? (
-                <Euro className="h-4 w-4" />
-              ) : (
-                <Package className="h-4 w-4" />
-              )}
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {showReminderAlert && (
+              <div className="flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                <BellRing className="h-3 w-3" />
+                <span>Reminder</span>
+              </div>
+            )}
+            {isOverdue ? (
+              <span className="rounded-full bg-[#ffdad6] px-3 py-1 text-xs font-semibold text-[#d0262d]">
+                {tCard("overdue")}
+              </span>
+            ) : (
+              <div className="bg-primary-container text-on-primary-container flex items-center justify-center rounded-full px-3 py-1 font-label-sm text-label-sm">
+                {t.type === "MONEY" ? (
+                  <Euro className="h-4 w-4" />
+                ) : (
+                  <Package className="h-4 w-4" />
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-1.5 text-[#40484b]">
@@ -258,10 +283,18 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
                   </button>
                   <button
                     onClick={handleRemind}
-                    disabled={isLoading}
-                    className="flex-1 rounded-lg border border-[#0d4f63] py-2 text-center text-sm font-medium text-[#0d4f63] transition-colors hover:bg-[#f1f4f5] disabled:opacity-50"
+                    disabled={isLoading || remindStatus !== "idle"}
+                    className={`flex-1 rounded-lg border py-2 text-center text-sm font-medium transition-colors disabled:opacity-50 ${
+                      remindStatus === "success"
+                        ? "border-green-600 bg-green-50 text-green-700"
+                        : "border-[#0d4f63] text-[#0d4f63] hover:bg-[#f1f4f5]"
+                    }`}
                   >
-                    {tBtn("remind")}
+                    {remindStatus === "loading"
+                      ? "..."
+                      : remindStatus === "success"
+                        ? "Sent!"
+                        : tBtn("remind")}
                   </button>
                 </>
               ) : (

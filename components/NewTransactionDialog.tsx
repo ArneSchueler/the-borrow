@@ -11,7 +11,10 @@ import {
   SendHorizonal,
   UserRoundPlus,
 } from "lucide-react";
-import { createTransaction } from "@/app/[locale]/actions/transaction";
+import {
+  createTransaction,
+  searchUsersByEmail,
+} from "@/app/[locale]/actions/transaction";
 
 export function NewTransactionDialog() {
   const searchParams = useSearchParams();
@@ -176,7 +179,7 @@ export function NewTransactionDialog() {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <IconField
+                <EmailAutocompleteField
                   name="partnerEmail"
                   icon={<UserRoundPlus className="h-4 w-4" />}
                   label="Recipient/Lender Email"
@@ -283,6 +286,102 @@ function Field({
           <Euro className="absolute right-3 top-3.5 h-4 w-4 text-[#40484b]" />
         ) : null}
       </div>
+    </div>
+  );
+}
+
+function EmailAutocompleteField({
+  icon,
+  label,
+  placeholder,
+  name,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  placeholder?: string;
+  name: string;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<
+    { email: string; name: string | null }[]
+  >([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (query.trim().length >= 2) {
+        try {
+          const data = await searchUsersByEmail(query);
+          setResults(data);
+          if (data.length > 0) setIsOpen(true);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        setResults([]);
+        setIsOpen(false);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative space-y-2" ref={wrapperRef}>
+      <label className="px-1 text-sm text-[#40484b]">{label}</label>
+      <div className="relative">
+        <span className="absolute left-3 top-3.5 text-[#70787c]">{icon}</span>
+        <input
+          name={name}
+          type="email"
+          autoComplete="off"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => {
+            if (results.length > 0) setIsOpen(true);
+          }}
+          placeholder={placeholder}
+          className="w-full rounded-lg border border-[#c0c8cb] bg-[#f5f2ed] py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-[#306576]"
+        />
+      </div>
+      {isOpen && results.length > 0 && (
+        <div className="absolute left-0 right-0 top-[100%] z-50 mt-1 overflow-hidden rounded-lg border border-[#c0c8cb] bg-white shadow-lg">
+          <ul className="max-h-48 overflow-y-auto">
+            {results.map((user) => (
+              <li key={user.email}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuery(user.email);
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full flex-col items-start px-4 py-2 text-left hover:bg-[#f4f3f2] focus:bg-[#f4f3f2] focus:outline-none"
+                >
+                  <span className="text-sm font-medium text-[#1a1c1c]">
+                    {user.email}
+                  </span>
+                  {user.name && (
+                    <span className="text-xs text-[#70787c]">{user.name}</span>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
