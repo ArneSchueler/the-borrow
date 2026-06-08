@@ -69,6 +69,10 @@ export default function TransactionClient({
   const isPendingReturn = transaction.status === "PENDING_RETURN";
   const isFullyConfirmed =
     transaction.creatorConfirmed && transaction.partnerConfirmed;
+  const isOverdue =
+    transaction.expectedReturnDate &&
+    new Date(transaction.expectedReturnDate) < new Date() &&
+    !isCompleted;
   const hasBeenReminded = Boolean(transaction.lastRemindedAt);
   const showReminderAlert =
     hasBeenReminded &&
@@ -245,6 +249,11 @@ export default function TransactionClient({
                 Abgeschlossen
               </span>
             )}
+            {isOverdue && (
+              <span className="rounded-full bg-red-100 px-3 py-1 text-[11px] font-semibold text-red-800">
+                Überfällig
+              </span>
+            )}
             {showReminderAlert && (
               <span className="flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-[11px] font-semibold text-red-700">
                 <BellRing className="h-3 w-3" />
@@ -387,6 +396,11 @@ export default function TransactionClient({
                           {isCompleted && (
                             <p className="inline-block rounded-full bg-[#e3e2e1] px-3 py-1 text-xs text-[#40484b]">
                               Completed
+                            </p>
+                          )}
+                          {isOverdue && (
+                            <p className="inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-800">
+                              Overdue
                             </p>
                           )}
                           {showReminderAlert && (

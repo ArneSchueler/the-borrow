@@ -5,6 +5,7 @@ import {
   MobileTransactionCard,
   DesktopTransactionCard,
 } from "@/components/TransactionCard";
+import { FilterableTransactions } from "@/components/FilterableTransactions";
 
 import { getLocale } from "next-intl/server";
 
@@ -55,15 +56,7 @@ export default async function BorrowedPage({ searchParams }: PageProps) {
         </section>
 
         <section className="space-y-3">
-          <div className="space-y-2">
-            {borrowedTransactions.length === 0 ? (
-              <p className="text-gray-500">Keine Transaktionen gefunden.</p>
-            ) : (
-              borrowedTransactions.map((t) => (
-                <MobileTransactionCard key={t.id} t={t} />
-              ))
-            )}
-          </div>
+          <FilterableTransactions transactions={borrowedTransactions} />
         </section>
 
         {completedTransactions.length > 0 && (
@@ -93,16 +86,7 @@ export default async function BorrowedPage({ searchParams }: PageProps) {
           </div>
         </section>
 
-        <div className="grid grid-cols-3 gap-4">
-          {borrowedTransactions.map((t) => (
-            <DesktopTransactionCard key={t.id} t={t} />
-          ))}
-          {borrowedTransactions.length === 0 && (
-            <p className="text-gray-500 col-span-3">
-              Keine Transaktionen gefunden.
-            </p>
-          )}
-        </div>
+        <FilterableTransactions transactions={borrowedTransactions} />
 
         {completedTransactions.length > 0 && (
           <section className="mt-12">

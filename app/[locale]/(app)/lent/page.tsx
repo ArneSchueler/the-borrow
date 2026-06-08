@@ -1,10 +1,11 @@
 import { auth } from "../../../../auth";
-import { redirect, Link } from "@/src/i18n/routing";
+import { redirect } from "@/src/i18n/routing";
 import { getUserTransactions } from "@/lib/data";
 import {
   MobileTransactionCard,
   DesktopTransactionCard,
 } from "@/components/TransactionCard";
+import { FilterableTransactions } from "@/components/FilterableTransactions";
 
 import { getLocale } from "next-intl/server";
 
@@ -34,6 +35,7 @@ export default async function LentPage({ searchParams }: PageProps) {
     );
   }
 
+  // Filter specifically for items lent by the user
   const lentTransactions = transactions.filter(
     (t) => t.isLentByMe && t.status !== "COMPLETED",
   );
@@ -50,20 +52,12 @@ export default async function LentPage({ searchParams }: PageProps) {
             Verliehen
           </h1>
           <p className="mt-2 text-[29px] text-[#3f474b]">
-            Deine verliehenen Gegenstände und Gelder.
+            Gegenstände und Gelder, die du verliehen hast.
           </p>
         </section>
 
         <section className="space-y-3">
-          <div className="space-y-2">
-            {lentTransactions.length === 0 ? (
-              <p className="text-gray-500">Keine Transaktionen gefunden.</p>
-            ) : (
-              lentTransactions.map((t) => (
-                <MobileTransactionCard key={t.id} t={t} />
-              ))
-            )}
-          </div>
+          <FilterableTransactions transactions={lentTransactions} />
         </section>
 
         {completedTransactions.length > 0 && (
@@ -88,16 +82,12 @@ export default async function LentPage({ searchParams }: PageProps) {
               Lent (Verliehen)
             </h2>
             <p className="mt-2 max-w-md text-[22px] text-[#40484b]">
-              Everything you have currently lent out to others.
+              Everything you have currently lent to others.
             </p>
           </div>
         </section>
 
-        <div className="grid grid-cols-3 gap-4">
-          {lentTransactions.map((t) => (
-            <DesktopTransactionCard key={t.id} t={t} />
-          ))}
-        </div>
+        <FilterableTransactions transactions={lentTransactions} />
 
         {completedTransactions.length > 0 && (
           <section className="mt-12">

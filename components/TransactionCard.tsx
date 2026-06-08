@@ -170,9 +170,11 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
       className={`flex h-full flex-col justify-between rounded-2xl border p-4 transition-all duration-300 ${
         isCompleted
           ? "border-[#e3e2e1] bg-[#faf9f8] opacity-60"
-          : showReminderAlert
-            ? "border-red-300 bg-red-50/50 hover:-translate-y-[2px] hover:border-red-400 hover:shadow-md"
-            : "border-[#d8dcdf] bg-white hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md"
+          : isOverdue
+            ? "border-red-300 bg-red-50/80 hover:-translate-y-[2px] hover:border-red-400 hover:shadow-md"
+            : showReminderAlert
+              ? "border-orange-300 bg-orange-50/50 hover:-translate-y-[2px] hover:border-orange-400 hover:shadow-md"
+              : "border-[#d8dcdf] bg-white hover:-translate-y-[2px] hover:border-[#134e5e] hover:shadow-md"
       }`}
     >
       <Link href={`/transaction/${t.id}`} className="group block flex-1">
@@ -182,7 +184,7 @@ export function MobileTransactionCard({ t }: { t: EnrichedTransaction }) {
           </p>
           <div className="flex items-center gap-2">
             {showReminderAlert && (
-              <div className="flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+              <div className="flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
                 <BellRing className="h-3 w-3" />
                 <span>Reminder</span>
               </div>
